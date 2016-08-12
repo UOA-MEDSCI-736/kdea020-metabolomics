@@ -57,5 +57,5 @@ Developer(s)/Scrum Team:
 - Beatrix Jones
 
 Scrum Master:
-- Teaching Staff, Kieran
-
+- Teaching Staff
+- Kieran
