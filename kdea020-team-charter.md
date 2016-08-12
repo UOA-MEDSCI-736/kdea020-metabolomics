@@ -45,7 +45,17 @@ For Kieran to complete a software-based research project, working as a team with
 
 ## Team Members
 
-Owner(s): Elizabeth McKenzie (primary), Beatrix Jones, Kieran Deane-Alder
-Developer(s)/Scrum Team: Kieran, other class members, tutors, Beatrix Jones
-Scrum Master: Teaching Staff, Kieran
+Owner(s): 
+- Elizabeth McKenzie (primary)
+- Beatrix Jones
+- Kieran Deane-Alder
+
+Developer(s)/Scrum Team:
+- Kieran, 
+- Class members
+- MedSci736 tutors
+- Beatrix Jones
+
+Scrum Master:
+- Teaching Staff, Kieran
 
