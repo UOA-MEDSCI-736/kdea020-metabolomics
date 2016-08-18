@@ -138,22 +138,31 @@ mkGraphName <- function() {
 }
 
 
-
-
 # - Making linear models
 
 # - Model 2: Before/After "break" (gap in days during experiment)
-IsBreak <- 30  # this will be a single value: the row no. for the sample which is the first after the "break"
-              # break was found at Sample C30 (94), Lorder[30]. So everything AFTER Lorder[30] in the list is after the break.
+IsBreak <- 30  # this will be a single value: the injection number of the sample done immediately before the break
+              # break was found at Sample C30 (94), Lorder[30]. So everything AFTER Lorder[30] in the list is after the break (= FALSE).
 Lorder.m <- as.matrix(Lorder)
 RowLorder.m <- row(Lorder.m)
-BreakSplit <- 30
+BreakSplit <- Lorder <= IsBreak
+BreakSplitC <- subset(BreakSplit, Type == "C")
 
 #a logical value that will factor Lorder into two levels at the split
 
-mkModel2Log <- function(b) {
-  mod2 <- lm(LogMeasurements[,b] ~ BreakSplit, subset = Type == "C")
-  cat("LOG", CompoundNames[,b], "R^2 = ", signif(summary(mod2)$r.squared,3))
+LogMeasurementsS <- 0
+
+for (b in 1:nrowsMetabNames) {
+LogMeasurementsS[b] <- subset(LogMeasurements[,b], Type == "S")
+}
+
+Stairstep.df=data.frame(BreakSplitC = rep(0, length(LogMeasurementsS) ) )
+Stairstep.df=data.frame(BreakSplitC = BreakSplit)
+
+ModelStairstep.Log <- function(b) {
+  mod2 <- lm(LogMeasurements[,b] ~ BreakSplit, subtype = Type == "C")
+  predict(mod2[b], Stairstep.df = Stairstep.df)
+  LogForDetrend <- predict(mod2[b], Stairstep.df = Stairstep.df)
 }
 
 # Modeling all compounds and producing output:
