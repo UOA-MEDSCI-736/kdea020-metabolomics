@@ -4,7 +4,12 @@
 # - If you just want to test the output, input ' mkSingleGraph(1) ' (where 1 may be replaced by the "number" of the compound you want to plot, 1-47)
 # - Or, you can now use ' mkGraphName("a string of text") ' and the script will plot what you entered, allowing multiple matches (and selection thereof). Not case sensitive.
 
+<<<<<<< HEAD
 WD <- getwd()
+=======
+WD <- "~/Desktop/736/Project/" #Setting working directory - eventually will take user input for this
+setwd(WD)
+>>>>>>> 70a1b123a2d8cf30f7ca46a2c8c048834a09d4ca
 cat("Working directory is:", WD)
 
 read.csv('Hair.csv')->Metab #load first data file with main readings
@@ -80,6 +85,7 @@ RowMatch <- function(rr) {
 
 nrowsMetabNames <-dim(MetabRowNamesDataFrame)[1]
 Lorder <- 0
+<<<<<<< HEAD
 Lorder2 <-0
 for (i in 1:nrowsMetabNames) {
   Lorder[i] <- RowMatch(i)
@@ -87,6 +93,12 @@ for (i in 1:nrowsMetabNames) {
 }
 Lorder <- as.numeric(Lorder)
 Lorder2 <- subset(Lorder, Type == 'C')
+=======
+for (i in 1:nrowsMetabNames) {
+  Lorder[i] <- RowMatch(i)
+}
+Lorder <- as.numeric(Lorder)
+>>>>>>> 70a1b123a2d8cf30f7ca46a2c8c048834a09d4ca
 
 TimeMatch <- function(tt) {
   ForMatch <- as.character(MetabRowNamesDataFrame$Names[tt])
@@ -114,6 +126,7 @@ mkSingleGraphLog <- function(b) { #b = no. of compound you want to plot - log sc
   # - Plotting things out, inc. model
   mod1 <- lm(LogMeasurements[,b]~Lorder, subset=Type=='C')
   titleLog <- c(CompoundNames[,b], "R^2 = ", signif(summary(mod1)$r.squared,3) )
+<<<<<<< HEAD
   DetrendLogMeasurements <- subset(LogMeasurements[,b], Type == 'S') #subset "S" from LogMeasurements - mod1 
   DetrendLogMeasurements <- as.matrix(DetrendLogMeasurements)
   residbla2 <- resid(mod1)
@@ -139,6 +152,13 @@ mkSingleGraphLog <- function(b) { #b = no. of compound you want to plot - log sc
       # linelog <- line(Lorder, LogMeasurements[,b])
       # abline(coef(linelog))
   # abline(mod1)
+=======
+  plot(Lorder, LogMeasurements[,b], main = titleLog, xlab = "Injection Order", ylab = "Log Relative Intensity", col=Type)
+  # - Making a trendline
+      # linelog <- line(Lorder, LogMeasurements[,b])
+      # abline(coef(linelog))
+  abline(mod1)
+>>>>>>> 70a1b123a2d8cf30f7ca46a2c8c048834a09d4ca
 }
 
 #if you don't want to use numbers!
@@ -192,6 +212,7 @@ mkGraphName <- function() {
   }
 }
 
+<<<<<<< HEAD
 
 
 
@@ -208,6 +229,16 @@ BreakSplit <- 30
 
 mkModel2 <- function(b) { 
   mod2 <- lm(Metab[,b] ~ BreakSplit, subset = Type == "C") #only using controls
+=======
+# - Making linear models
+
+# - Model 2: Before/After "break" (gap in days during experiment)
+IsBreak <- 25 # this will be a single value: the row no. for the sample which is the first after the "break"
+BreakSplit <- Lorder <= IsBreak #a logical value that will factor Lorder into two levels at the split
+
+mkModel2 <- function(b) { 
+  mod2 <- lm(Metab[,b] ~ BreakSplit, subset = Type == "C")
+>>>>>>> 70a1b123a2d8cf30f7ca46a2c8c048834a09d4ca
   cat(CompoundNames[,b], "R^2 = ", signif(summary(mod2)$r.squared,3))
 }
 
