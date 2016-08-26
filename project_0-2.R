@@ -35,8 +35,8 @@ Inj.df <- data.frame(Names = InjOrderNames, Order = MetabInjOrder, Time = InjOrd
 InjFinal <- Inj.df[ !(is.na(InjOrder$Case.control)), ] #instead of removing stuff that isn't C/S, use an attrib of the data frame
 
 # - Doing logs and stuff
-LogMeasurements<-log(Metab)
-LogMeasurements<-as.matrix(LogMeasurements)
+LogMeasurements <- log(Metab)
+LogMeasurements <- as.matrix(LogMeasurements)
 
 InjFinal$Names <- gsub("^C(\\d)$", "C0\\1", InjFinal$Names) #need to turn C1 -> C01 etc. for parity between Metab and InjOrder
 InjFinal$Names <- gsub("^S(\\d)$", "S0\\1", InjFinal$Names) #for S1 -> S01 etc.
@@ -141,8 +141,8 @@ mkGraphName <- function() {
 # - Making linear models
 
 # - Model 2: Before/After "break" (gap in days during experiment)
-IsBreak <- 30  # this will be a single value: the injection number of the sample done immediately before the break
-              # break was found at Sample C30 (94), Lorder[30]. So everything AFTER Lorder[30] in the list is after the break (= FALSE).
+IsBreak <- 36 # this will be a single value: the injection number of the sample done immediately before the break
+               # break was found at Sample C30 (94), So everything <=36 in the list is before the break (= TRUE).
 Lorder.m <- as.matrix(Lorder)
 RowLorder.m <- row(Lorder.m)
 BreakSplit <- Lorder <= IsBreak
@@ -150,20 +150,60 @@ BreakSplitC <- subset(BreakSplit, Type == "C")
 
 #a logical value that will factor Lorder into two levels at the split
 
-LogMeasurementsS <- 0
+LogMeasurementsC <- subset(LogMeasurements, Type == "C")
+LogMeasurementsS <- subset(LogMeasurements, Type == "S")
 
-for (b in 1:nrowsMetabNames) {
-LogMeasurementsS[b] <- subset(LogMeasurements[,b], Type == "S")
-}
 
-Stairstep.df=data.frame(BreakSplitC = rep(0, length(LogMeasurementsS) ) )
+Stairstep.df=data.frame(BreakSplitC = rep(0, length(LogMeasurements) ) )
 Stairstep.df=data.frame(BreakSplitC = BreakSplit)
 
-ModelStairstep.Log <- function(b) {
-  mod2 <- lm(LogMeasurements[,b] ~ BreakSplit, subtype = Type == "C")
-  predict(mod2[b], Stairstep.df = Stairstep.df)
-  LogForDetrend <- predict(mod2[b], Stairstep.df = Stairstep.df)
+summy <- 0
+
+#From here on out, just looking at log(relative intensity) as a scaling normalisation step
+
+mod2 <- lm(LogMeasurementsC ~ BreakSplitC)
+summ.mod2 <- summary(mod2)
+predict.mod2 <- predict(mod2, Stairstep.df = Stairstep.df)
+
+
+R2.Break <- 0
+
+AllR2.Break <- function(i) { #where the input is the number of the compound name, and the break R^2
+  Reg <- regexpr("r.squared = ", summ.mod2[i]) #the regular expresssions are necessary
+  RegStart <- Reg+12                           #as summary()$r.squared seems to run into problems with the break model (mod2)
+  RegEnd <- Reg+28
+  R2.Break[i] <- substring(grep("[\\d+]", summ.mod2[i], ignore.case = TRUE, value = TRUE), RegStart,RegEnd)
+  cat(signif(as.numeric(R2.Break[i]),3), "\n" )
 }
+
+R2.Linear <- 0
+
+AllR2.Linear <- function(i) {
+  mod1 <- lm(LogMeasurements[,i]~Lorder, subset=Type=='C')
+  cat(CompoundNames[,i], "\t", signif(summary(mod1)$r.squared,3), "\t" )
+}
+
+GetAllR2 <- function() {
+  cat("Compound", "\t", "LINEAR R^2", "\t", "BREAK R^2", "\n")
+  for (i in seq_along(CompoundNames)) {
+    AllR2.Linear(i)
+    AllR2.Break(i)
+  }
+}
+
+# linear.df <- data.frame()
+
+DoCorrection.Linear <- function() {
+  mod1 <- lm(LogMeasurements ~ Lorder, subset=Type=='C')
+  predict.mod1 <- predict(mod1, linear.df = linear.df)
+}
+
+
+DoCorrection.Break <- function() {
+  
+}
+
+# Stairstep.Log <- ModelStairstep.Log(LogMeasurements) #residuals for subtraction for each [, compound#]
 
 # Modeling all compounds and producing output:
 #make a data frame
