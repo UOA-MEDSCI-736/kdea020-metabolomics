@@ -1,7 +1,14 @@
 # - Basic instructions and data import
+#Import libraries:
+library(qvalue)
 
 WD <- getwd()
-cat("Working directory is:", WD)
+# cat("Working directory is:", WD)
+
+# For citation:
+citeQ <- "John D. Storey with contributions from Andrew J. Bass, Alan Dabney and David Robinson (2015). qvalue: Q-value estimation for false
+  discovery rate control. R package version 2.4.2. http://github.com/jdstorey/qvalue"
+# cat("This script uses the Q-value package from the open-source project Bioconductor:", "\n", citeQ, "\n")
 
 read.csv('Hair.csv')->Metab #load first data file with main readings
 read.csv('inj_order_SGA_hair.csv')->InjOrder #load injection order data file with equipment status
@@ -35,7 +42,7 @@ Inj.df <- data.frame(Names = InjOrderNames, Order = MetabInjOrder, Time = InjOrd
 InjFinal <- Inj.df[ !(is.na(InjOrder$Case.control)), ] #instead of removing stuff that isn't C/S, use an attrib of the data frame
 
 # - Doing logs and stuff
-LogMeasurements <- log(Metab)
+LogMeasurements <- log10(Metab)
 LogMeasurements <- as.matrix(LogMeasurements)
 
 InjFinal$Names <- gsub("^C(\\d)$", "C0\\1", InjFinal$Names) #need to turn C1 -> C01 etc. for parity between Metab and InjOrder
@@ -84,6 +91,10 @@ mkSingleGraphLog <- function(b) { #b = no. of compound you want to plot - log sc
   
   plot(Lorder, LogMeasurements[,b], main = titleLog, xlab = "Injection Order", ylab = "Log Relative Intensity", col=Type)
   abline(mod1)
+  X <- subset(LogMeasurements[,b], Type == "C")
+  Y <- subset(LogMeasurements[,b], Type == "S")
+  sig <- t.test(X, Y)
+  sig
 }
 
 #if you don't want to use numbers!
@@ -191,20 +202,70 @@ GetAllR2 <- function() {
   }
 }
 
-# linear.df <- data.frame()
+linear.df = data.frame(LogMeasurementsC = rep(0, length(BreakSplit) ) )
+linear.df = data.frame(LogMeasurementsC = LogMeasurements)
 
-DoCorrection.Linear <- function() {
-  mod1 <- lm(LogMeasurements ~ Lorder, subset=Type=='C')
+finalvalues <- as.matrix(LogMeasurements[,1])
+
+DoCorrection.Linear <- function(i) {
+  mod1 <- lm(LogMeasurements[,i] ~ Lorder, subset=Type=='C')
   predict.mod1 <- predict(mod1, linear.df = linear.df)
+  finalvalues <- LogMeasurements[,i]  - predict.mod1
+  # cat(CompoundNames[,i], "\n", finalvalues[,i], "\n")
 }
 
 
-DoCorrection.Break <- function() {
+DoCorrection.Break <- function(i) {
+  mod2 <- lm(LogMeasurementsC[,i] ~ BreakSplitC)
+  predict.mod2 <- predict(mod2, Stairstep.df = Stairstep.df)
+  finalvalues <- LogMeasurements[,i]  - predict.mod2
+  # cat(predict.mod2, "\n")
+}
+
+# DoAllModels <- function() {
+  # cat("Compound", "\t", "LINEAR", "\t", "BREAK", "\n")
+
+LinearCorrections <- matrix(nrow = nRows, ncol = 1)
+BreakCorrections <- matrix(nrow = nRows, ncol = 1)
+nMetabs <- nColumns
+
+# for (i in seq_along(CompoundNames)) {
+LinearCorrectionGraph <- function(i) {
+  LinearCorrections <- DoCorrection.Linear(i)
+  plot(Lorder, LinearCorrections, main = CompoundNames[,i], xlab = "Injection Order", ylab = "Log Relative Intensity", col=Type)
+  C <- subset(LinearCorrections, Type == "C")
+  S <- matrix(subset(LinearCorrections, Type == "S"))
+  C <- 10^C
+  S <- 10^S
+  sig <- t.test(C, S, alternative = "t", mu = 0, paired = FALSE, var.equal = TRUE)
+  sig2 <- kruskal.test(LinearCorrections, Type)
+  cat("Linear model:", "\n", "T-test p-value:", sig$p.value, "\n", "Kruskal-Wallis p-value:", sig2$p.value, "\n", "\n") #prints both models' stats
+}
+
+
+BreakCorrectionGraph <- function(i) {
+  BreakCorrections <- DoCorrection.Break(i)
+  plot(Lorder, BreakCorrections, main = CompoundNames[,i], xlab = "Injection Order", ylab = "Relative Intensity", col=Type) #plot a graph
+  C <- subset(BreakCorrections, Type == "C")
+  S <- subset(BreakCorrections, Type == "S")
+  C <- 10^C #correcting for log values by exponent
+  S <- 10^S #as above, for cases instead of controls
+  sig <- t.test(C, S, alternative = "t", mu = 0, paired = FALSE, var.equal = TRUE) #Performs t-test on normalised data from break model
+  sig2 <- kruskal.test(BreakCorrections, Type) #Performs a Kruskal-Wallis non-parametric significance test
   
+  
+  
+  sig.pvalues <- empPvals(stat = , stat0 = , pool = FALSE)
+  sig.q <- qvalue(p = sig.pvalues)
+  # sig2.q <- 
+  cat("Break model:", "\n", "T-test p-value:", sig$p.value, "\n", "T-test q-value:", sig,q, "\n", "Kruskal-Wallis p-value:", sig2$statistic, "\n", "\n") 
 }
 
-# Stairstep.Log <- ModelStairstep.Log(LogMeasurements) #residuals for subtraction for each [, compound#]
+ShowAndTell <- function(i) { #this function produces a set of graphs for a given compound
+mkSingleGraphLog(i)
+LinearCorrectionGraph(i)
+BreakCorrectionGraph(i)
+}
 
-# Modeling all compounds and producing output:
-#make a data frame
-#cat, concisely, elements of dataframe (Compound Name, Linear R^2, Break R^2, new line) for print
+#Make name input process modular, with compound number output going into any number of other specified functions?
+#Cite use of Bioconductor Q-value package in markdown and script! Use: ' citation("qvalue") '
