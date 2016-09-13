@@ -1,11 +1,10 @@
 # - Basic instructions and data import
 #Import libraries:
 library(qvalue)
-<<<<<<< HEAD
+
 
 #Do TDD stuff! Write the damn tests! And make program modular.
-=======
->>>>>>> a51e73ea8c80cde3355fb3e9ed976951efbfa25f
+
 
 WD <- getwd()
 # cat("Working directory is:", WD)
@@ -46,14 +45,14 @@ Inj.df <- data.frame(Names = InjOrderNames, Order = MetabInjOrder, Time = InjOrd
 
 InjFinal <- Inj.df[ !(is.na(InjOrder$Case.control)), ] #instead of removing stuff that isn't C/S, use an attrib of the data frame
 
-<<<<<<< HEAD
+
 LogMeasurements <- log10(Metab) #Perform log transformation on measurements
 LogMeasurements <- as.matrix(LogMeasurements) #Coerce the vector into a matrix for later use
-=======
+
 # - Doing logs and stuff
 LogMeasurements <- log10(Metab)
 LogMeasurements <- as.matrix(LogMeasurements)
->>>>>>> a51e73ea8c80cde3355fb3e9ed976951efbfa25f
+
 
 InjFinal$Names <- gsub("^C(\\d)$", "C0\\1", InjFinal$Names) #need to turn C1 -> C01 etc. for parity between Metab and InjOrder
 InjFinal$Names <- gsub("^S(\\d)$", "S0\\1", InjFinal$Names) #for S1 -> S01 etc.
@@ -215,8 +214,6 @@ DoCorrection.Linear <- function(i) {
   predict.mod1 <- predict(mod1, linear.df = linear.df)
   finalvalues <- LogMeasurements[,i]  - predict.mod1
   # cat(CompoundNames[,i], "\n", finalvalues[,i], "\n")
-<<<<<<< HEAD
-=======
 }
 
 
@@ -245,7 +242,6 @@ LinearCorrectionGraph <- function(i) {
   sig <- t.test(C, S, alternative = "t", mu = 0, paired = FALSE, var.equal = TRUE)
   sig2 <- kruskal.test(LinearCorrections, Type)
   cat("Linear model:", "\n", "T-test p-value:", sig$p.value, "\n", "Kruskal-Wallis p-value:", sig2$p.value, "\n", "\n") #prints both models' stats
->>>>>>> a51e73ea8c80cde3355fb3e9ed976951efbfa25f
 }
 
 DoCorrection.Break <- function(i) {
@@ -275,10 +271,6 @@ LinearCorrectionGraph <- function(i) {
   cat("Linear model:", "\n", "T-test p-value:", sig$p.value, "\n", "Kruskal-Wallis p-value:", sig2$p.value, "\n", "\n") #prints both models' stats
 }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> a51e73ea8c80cde3355fb3e9ed976951efbfa25f
 BreakCorrectionGraph <- function(i) {
   BreakCorrections <- DoCorrection.Break(i)
   plot(Lorder, BreakCorrections, main = CompoundNames[,i], xlab = "Injection Order", ylab = "Relative Intensity", col=Type) #plot a graph
@@ -290,14 +282,13 @@ BreakCorrectionGraph <- function(i) {
   sig2 <- kruskal.test(BreakCorrections, Type) #Performs a Kruskal-Wallis non-parametric significance test
   
   
-<<<<<<< HEAD
+
   # sig.pvalues <- empPvals(stat = , stat0 = , pool = FALSE)
   # sig.q <- qvalue(p = sig.pvalues)
-=======
-  
+
   sig.pvalues <- empPvals(stat = , stat0 = , pool = FALSE)
   sig.q <- qvalue(p = sig.pvalues)
->>>>>>> a51e73ea8c80cde3355fb3e9ed976951efbfa25f
+
   # sig2.q <- 
   cat("Break model:", "\n", "T-test p-value:", sig$p.value, "\n", "T-test q-value:", sig,q, "\n", "Kruskal-Wallis p-value:", sig2$statistic, "\n", "\n") 
 }
