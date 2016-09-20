@@ -1,2 +1,5 @@
 # metabolomics-project
-This is a test commit to the readme file.
+
+Metabolomics Project Trello board:
+
+https://trello.com/b/YHwLrEsh/metabolomics-project-scrum-board
