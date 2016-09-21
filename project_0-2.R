@@ -16,7 +16,8 @@ citeQ <- "John D. Storey with contributions from Andrew J. Bass, Alan Dabney and
   discovery rate control. R package version 2.4.2. http://github.com/jdstorey/qvalue"
 # cat("This script uses the Q-value package from the open-source project Bioconductor:", "\n", citeQ, "\n")
 
-read.csv('Hair.csv')->Metab #load first data file with main readings
+# read.csv('Hair.csv')->Metab #load first data file with main readings
+read.csv('RawData.csv')->Metab
 read.csv('inj_order_SGA_hair.csv')->InjOrder #load injection order data file with equipment status
 
 MetabInfo<-Metab #dump Metab into MetabInfo
@@ -269,9 +270,9 @@ for(i in 1:nColumns) {
   pval.mod3[i] <- summary(mod3)$coef[2,4]
 }
 
-qvals.mod1 <- qvalue(pval.mod1, lambda=0.01)$qval #computes B-H q value
-qvals.mod2 <- qvalue(pval.mod2, lambda=0.01)$qval
-qvals.mod3 <- qvalue(pval.mod2, lambda=0.01)$qval
+qvals.mod1 <- signif(qvalue(pval.mod1, lambda=0.01)$qval, 3) #computes B-H q value
+qvals.mod2 <- signif(qvalue(pval.mod2, lambda=0.01)$qval, 3)
+qvals.mod3 <- signif(qvalue(pval.mod3, lambda=0.01)$qval, 3)
 
 ShowAndTell <- function(i) { #this function produces a set of graphs for a given compound
   mkSingleGraphLog(i)
