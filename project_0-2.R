@@ -17,7 +17,8 @@ citeQ <- "John D. Storey with contributions from Andrew J. Bass, Alan Dabney and
 # cat("This script uses the Q-value package from the open-source project Bioconductor:", "\n", citeQ, "\n")
 
 # read.csv('Hair.csv')->Metab #load first data file with main readings
-read.csv('RawData.csv')->Metab
+myfile <- as.character("Hair.csv")
+read.csv('Hair.csv')->Metab
 read.csv('inj_order_SGA_hair.csv')->InjOrder #load injection order data file with equipment status
 
 MetabInfo<-Metab #dump Metab into MetabInfo

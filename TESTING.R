@@ -4,22 +4,10 @@
 #test that vectors include their expected values and attributes?
 #I.e. is a matrix, is the right length, or has ONLY numeric variables, or has BOTH numerics and strings...
 
-read.csv("NLDL Data/TEK0000.CSV", header = FALSE) -> myfile
 library(testthat)
 
-V4 <- myfile[,4]
-V5 <- myfile[,5]
-
-test1 <- function(i) {
-  if (i[1] == myfile[1,4]) {
-    print("Test passed.")
-  }
-  else
-    print("Test failed!")
-}
-
-context("File imports")
-
-test_that("R has imported the columns from the file correctly", {
-  expect_equal(V4, myfile[,4])
+test_that("R has read the file correctly", { #testing for reading
+  teststring <- readLines(myfile) #coerces the .CSV into a string
+  splitted <- strsplit(teststring, ",") #splits the string by commas into a list
+  expect_equal(as.numeric(splitted[[2]][2]), Metab[1,1]) #checks to see if the list member corresponding to the expected value present in the data frame matches that value
 })
