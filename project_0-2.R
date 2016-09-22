@@ -92,18 +92,21 @@ mkSingleGraph <- function(d) { #d = no. of compound you want to plot
   #Should probably include a legend for Type/Colouring
 }
 
+y.lim <- c(-1, 3)
+
 mkSingleGraphLog <- function(b) { #b = no. of compound you want to plot - log scale, and by injection order
   # - Plotting things out, inc. model
   y<-LogMeasurements[Type=='C',b]
   x<-Lorder[Type=='C']
   mod1 <- lm(y~x)
   titleLog <- c(CompoundNames[,b], "R^2 = ", signif(summary(mod1)$r.squared,3) )
-  plot(Lorder, LogMeasurements[,b], main = titleLog, xlab = "Injection Order", ylab = "Log Relative Intensity", col=Type)
+  plot(Lorder, LogMeasurements[,b], main = titleLog, xlab = "Injection Order", ylab = "Log Relative Intensity", col=Type, ylim = y.lim)
   abline(mod1)
   X <- subset(LogMeasurements[,b], Type == "C")
   Y <- subset(LogMeasurements[,b], Type == "S")
   sig <- t.test(X, Y)
   sig
+  devAskNewPage(ask = TRUE)
 }
 
 #for the test case for graphs: see if points in table and graph correlate properly
@@ -220,8 +223,8 @@ DoCorrection.Linear <- function(i) {
   finalvalues <- LogMeasurements[,i]  - predict.mod1
   sig <- t.test(finalvalues~Type)
   title <- c(CompoundNames[,i], "Linear Model", "t.test p =", signif(sig$p.value,3))
-  plot(Lorder, finalvalues, main = title, xlab = "Injection Order", ylab = "Log Relative Intensity", col=Type)
-  # cat(CompoundNames[,i], "\n", finalvalues[,i], "\n")
+  plot(Lorder, finalvalues, main = title, xlab = "Injection Order", ylab = "Log Relative Intensity", col=Type, ylim = y.lim)
+  devAskNewPage(ask = TRUE)
 }
 
 DoCorrection.Break <- function(i) {
@@ -233,8 +236,8 @@ DoCorrection.Break <- function(i) {
   finalvalues2 <- LogMeasurements[,i]-predict.mod2
   sig <- t.test(finalvalues2~Type)
   title <- c(CompoundNames[,i], "Step Model", "t.test p =", signif(sig$p.value,3))
-  plot(Lorder, finalvalues2, main = title, xlab = "Injection Order", ylab = "Log Relative Intensity", col=Type)
-  # cat(predict.mod2, "\n")
+  plot(Lorder, finalvalues2, main = title, xlab = "Injection Order", ylab = "Log Relative Intensity", col=Type, ylim = y.lim)
+  devAskNewPage(ask = TRUE)
 }
 
 # LinearCorrectionGraph <- function(i) {
