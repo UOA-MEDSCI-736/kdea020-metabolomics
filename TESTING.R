@@ -6,8 +6,11 @@
 
 library(testthat)
 
+#Input tests
 test_that("R has read the file correctly", { #testing for reading
   teststring <- readLines(myfile) #coerces the .CSV into a string
   splitted <- strsplit(teststring, ",") #splits the string by commas into a list
   expect_equal(as.numeric(splitted[[2]][2]), Metab[1,1]) #checks to see if the list member corresponding to the expected value present in the data frame matches that value
 })
+
+#

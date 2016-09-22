@@ -16,7 +16,6 @@ citeQ <- "John D. Storey with contributions from Andrew J. Bass, Alan Dabney and
   discovery rate control. R package version 2.4.2. http://github.com/jdstorey/qvalue"
 # cat("This script uses the Q-value package from the open-source project Bioconductor:", "\n", citeQ, "\n")
 
-# read.csv('Hair.csv')->Metab #load first data file with main readings
 myfile <- as.character("Hair.csv")
 read.csv('Hair.csv')->Metab
 read.csv('inj_order_SGA_hair.csv')->InjOrder #load injection order data file with equipment status
@@ -265,6 +264,8 @@ pval.mod2 <- 0
 pval.mod3 <- 0
 
 #qval stuff, also making model3
+#
+
 for(i in 1:nColumns) {
   mod1 <- lm(LogMeasurements[,i] ~ Lorder, subset = Type == 'C')
   mod2 <- lm(LogMeasurements[,i] ~ BreakSplit, subset = Type == 'C')
@@ -278,12 +279,14 @@ qvals.mod1 <- signif(qvalue(pval.mod1, lambda=0.01)$qval, 3) #computes B-H q val
 qvals.mod2 <- signif(qvalue(pval.mod2, lambda=0.01)$qval, 3)
 qvals.mod3 <- signif(qvalue(pval.mod3, lambda=0.01)$qval, 3)
 
+
 ShowAndTell <- function(i) { #this function produces a set of graphs for a given compound
   mkSingleGraphLog(i)
   DoCorrection.Linear(i)
   DoCorrection.Break(i)
   cat(CompoundNames[,i], "\n", "Type covar. p-value:", pval.mod3[i], "\n", "Q-values for each model:", "\n", "Linear:", qvals.mod1[i], "\n", "Step:", qvals.mod2[i], "\n", "Linear covar. with Type:", qvals.mod3[i], "\n")
 }
+
 
 #Make name input process modular, with compound number output going into any number of other specified functions?
 #Cite use of Bioconductor Q-value package in markdown and script! Use: ' citation("qvalue") '
