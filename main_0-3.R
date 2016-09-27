@@ -34,10 +34,6 @@ citeQ <- "John D. Storey with contributions from Andrew J. Bass, Alan Dabney and
 #BEGIN BASIC USER INPUT CODE
 
 
-# myfile <- as.character("Hair.csv")
-# read.csv('Hair.csv')->Metab
-# read.csv('inj_order_SGA_hair.csv')->InjOrder
-# 
 library(testthat) #import testthat library
 
 UserInput <- function() {
@@ -83,7 +79,7 @@ InputFiles <- function() {
   }
   else
     if(grepl("Y", default, ignore.case = TRUE) == TRUE) {
-      myfile <- as.character("Hair.csv")
+      myfile <<- as.character("Hair.csv")
       read.csv('Hair.csv')->>Metab
       read.csv('inj_order_SGA_hair.csv')->>InjOrder #load injection order data file with equipment status
       UserInput()
@@ -104,5 +100,21 @@ InputFiles <- function() {
 }
 
 InputFiles()
+
+MetabInfo<-Metab #dump Metab into MetabInfo
+CompoundNames<-MetabInfo[1]
+CompoundNames<-t(CompoundNames)
+Metab<-Metab[,-c(1)] #subtract compound names
+Metab<-t(Metab) #Values from rows into columns, so sample names are on rows
+Metab<-as.data.frame(Metab)
+Missing<-is.na(Metab) #Allows to check for NA values (reports TRUE/FALSE for each value)
+nColumns<-dim(Metab)[2] #no. of columns is set to dimensions of Metab columns
+nRows<-dim(Metab)[1]
+# - So now data is set up so that Metab[2,4] = [S04, Compound 4 value] etc.
+
+# - Get C or S for each sample so can do just of one group
+Type<-substr(rownames(Metab),1,1) #Grab first letter of rownames
+Type[Type=='X']<-'Sample' #Define as either C or S for each sample
+Type<-factor(Type) #Coerce vector Type to a factor with two levels (C and S)
 
 #UserInput()
