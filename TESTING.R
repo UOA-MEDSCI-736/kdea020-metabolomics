@@ -14,3 +14,8 @@ test_that("R has read the file correctly", { #testing for reading
 })
 
 #
+
+test_that("The injection ordering function has correctly ordered the samples", {
+  MatchCheck <- RowMatch(1)[2]
+  identical(MatchCheck, InjFinal$Names[1])
+})

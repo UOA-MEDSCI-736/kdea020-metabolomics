@@ -7,7 +7,7 @@
 
 library(qvalue) #import qvalue library
 source ("project_0-2.R")
-source("TESTING.R")
+# source("TESTING.R")
 
 Metab <- 0
 InjOrder <- 0

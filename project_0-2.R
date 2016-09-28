@@ -1,6 +1,7 @@
 # - Basic instructions and data import
 #Import libraries:
 library(qvalue)
+library(testthat)
 
 #Set up input for Sanjid to use next week.
 
@@ -87,7 +88,17 @@ mkSingleGraph <- function(d) { #d = no. of compound you want to plot
   titleRel <- c(CompoundNames[,d], "R^2 = ", signif(summary(mod1)$r.squared,3) )
   plot(Lorder, Metab[,d], main = titleRel, xlab = "Injection Order", ylab = "Relative Intensity", col=Type)
   # - Making a trendline
-  abline(mod1)
+  # abline(mod1)
+  #Should probably include a legend for Type/Colouring
+}
+
+mkSingleGraphNORDER <- function(d) { #d = no. of compound you want to plot
+  # - Plotting things out
+  mod1 <- lm(Metab[,d]~Lorder, subset=Type=='C')
+  titleRel <- c(CompoundNames[,d], "R^2 = ", signif(summary(mod1)$r.squared,3) )
+  plot(1:83, Metab[,d], main = titleRel, xlab = "Sample No.", ylab = "Relative Intensity", col=Type)
+  # - Making a trendline
+  # abline(mod1)
   #Should probably include a legend for Type/Colouring
 }
 
@@ -287,6 +298,6 @@ ShowAndTell <- function(i) { #this function produces a set of graphs for a given
   cat(CompoundNames[,i], "\n", "Type covar. p-value:", pval.mod3[i], "\n", "Q-values for each model:", "\n", "Linear:", qvals.mod1[i], "\n", "Step:", qvals.mod2[i], "\n", "Linear covar. with Type:", qvals.mod3[i], "\n")
 }
 
-
+source("TESTING.R")
 #Make name input process modular, with compound number output going into any number of other specified functions?
 #Cite use of Bioconductor Q-value package in markdown and script! Use: ' citation("qvalue") '
