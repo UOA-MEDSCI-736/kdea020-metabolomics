@@ -16,6 +16,6 @@ test_that("R has read the file correctly", { #testing for reading
 #
 
 test_that("The injection ordering function has correctly ordered the samples", {
-  MatchCheck <- RowMatch(1)[2]
-  identical(MatchCheck, InjFinal$Names[1])
+  MatchCheck <- RowMatch(33)[2]
+  expect_equal(MatchCheck, InjFinal$Names[33]) #testing that the output of RowMatch(), for a given row, matches the correct order of Samples from InjFinal
 } )
