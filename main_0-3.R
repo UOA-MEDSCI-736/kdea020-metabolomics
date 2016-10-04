@@ -12,15 +12,14 @@ Metab <- 0
 InjOrder <- 0
 myfile <- 0
 
-CheckInstalled <- installed.packages()
+CheckInstalled <- installed.packages() #in order to check whether the user has bioconductor installed, which is a dependency of this script
 
-if( sum (grepl ("qvalue", CheckInstalled) ) == 0 ) {
+if( sum (grepl ("qvalue", CheckInstalled) ) == 0 ) { #if qvalue is not installed...
   NoQvalue <- c("Bioconductor qvalue package not installed! Please install it.", "\n", "For instructions to install Qvalue package, go to https://bioconductor.org/packages/release/bioc/html/qvalue.html")
-  stop(NoQvalue)#we want to terminate the program...
+  stop(NoQvalue) #Print the above message, and we want to terminate the program...
 }
 
 # check and store file here
-
 
 WD <- getwd() #set working directory for the project as wherever the script is opened
 # cat("Working directory is:", WD)

@@ -250,6 +250,7 @@ DoCorrection.Break <- function(i) {
   devAskNewPage(ask = TRUE)
 }
 
+   # The below code is deprecated and will eventually be removed
 # LinearCorrectionGraph <- function(i) {
 #   LinearCorrections <- DoCorrection.Linear(i)
 #   plot(Lorder, LinearCorrections, main = CompoundNames[,i], xlab = "Injection Order", ylab = "Log Relative Intensity", col=Type)
