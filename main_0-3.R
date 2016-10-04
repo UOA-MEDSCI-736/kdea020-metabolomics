@@ -83,10 +83,10 @@ InputFiles <- function() {
       UserInput()
     }
   if(grepl("N", default, ignore.case = TRUE) == TRUE) {
-    cat("Please choose a file containing the main dataset.", "(Press ENTER to continue)", "\n")
+    cat("Please choose a .CSV file containing the main dataset.", "(Press ENTER to continue)", "\n")
     wait <- readline()
     MetabChoose <- file.choose()
-    cat("Please choose a file containing the injection order for the samples.", "(Press ENTER to continue)", "\n")
+    cat("Please choose a .CSV file containing the injection order for the samples.", "(Press ENTER to continue)", "\n")
     wait <- readline()
     InjChoose <- file.choose()
     myfile <<- as.character(MetabChoose)
