@@ -69,27 +69,27 @@ UserInput <- function() {
   }
 }
 
-InputFiles <- function() {
-  default <- readline(prompt = "Use default dataset? Y / N: ")
-  default <- ifelse(grepl("[^YNyn]", default),NA,default)
-  if (is.na(default)) {
-    cat("'", default, "'", "is not a Y or N! Please try again.")
+InputFiles <- function() { #Init a function to allow for the user to input their own data files
+  default <- readline(prompt = "Use default dataset? Y / N: ") #ask the user if they want to use the default dataset file names, or to choose their own
+  default <- ifelse(grepl("[^YNyn]", default),NA,default) #Check that the input is either Y or N (not case-sensitive) - set to NA if not
+  if (is.na(default)) { #If not Y/N...
+    cat("'", default, "'", "is not a Y or N! Please try again.") #Throw up an error message
   }
-  else
+  else #If it's a Y...
     if(grepl("Y", default, ignore.case = TRUE) == TRUE) {
-      myfile <<- as.character("Hair.csv")
-      read.csv('Hair.csv')->>Metab
+      myfile <<- as.character("Hair.csv") #Default main dataset name
+      read.csv('Hair.csv')->>Metab #Assigning to a data frame as a global
       read.csv('inj_order_SGA_hair.csv')->>InjOrder #load injection order data file with equipment status
-      UserInput()
+      UserInput() #Run the UserInput function
     }
-  if(grepl("N", default, ignore.case = TRUE) == TRUE) {
-    cat("Please choose a .CSV file containing the main dataset.", "(Press ENTER to continue)", "\n")
-    wait <- readline()
-    MetabChoose <- file.choose()
+  if(grepl("N", default, ignore.case = TRUE) == TRUE) { #But if it's an N (the use wants to specify their own dataset)...
+    cat("Please choose a .CSV file containing the main dataset.", "(Press ENTER to continue)", "\n") #ask them what they want to input
+    wait <- readline() #wait on their input
+    MetabChoose <- file.choose() #open up R's inbuilt file selection GUI
     cat("Please choose a .CSV file containing the injection order for the samples.", "(Press ENTER to continue)", "\n")
     wait <- readline()
     InjChoose <- file.choose()
-    myfile <<- as.character(MetabChoose)
+    myfile <<- as.character(MetabChoose) #assigning files as globals for input...
     cat(MetabChoose, InjChoose, myfile)
     Metab <<- read.csv(MetabChoose)
     InjOrder <<- read.csv(InjChoose)
