@@ -292,7 +292,7 @@ qvals.mod2 <- signif(qvalue(pval.mod2, lambda=0.01)$qval, 3)
 qvals.mod3 <- signif(qvalue(pval.mod3, lambda=0.01)$qval, 3)
 
 
-ShowAndTell <- function(i) { #this function produces a set of graphs for a given compound
+ShowAndTell <- function(i) { #this function produces the full set of graphs for a given compound, where i is the rownumber of that compound in Metab[]
   mkSingleGraphLog(i)
   DoCorrection.Linear(i)
   DoCorrection.Break(i)
