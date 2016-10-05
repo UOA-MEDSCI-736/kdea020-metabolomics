@@ -226,19 +226,19 @@ GetAllR2 <- function() { #A function to output the R^2s for both models comparat
 }
 
 DoCorrection.Linear <- function(i) { #this function performs corrections to the data based on the linear model (centering, scaling, subtraction of residuals)
-  y <- LogMeasurements[Type=='C',i]  #
-  x <- Lorder[Type=='C'] #
-  mod1 <- lm(y ~ x) #
-  TotalDataForPredict=data.frame(x=Lorder) #
-  predict.mod1 <- predict(mod1, newdata=TotalDataForPredict) #
-  finalvalues <- LogMeasurements[,i]  - predict.mod1
-  sig <- t.test(finalvalues~Type)
-  title <- c(CompoundNames[,i], "Linear Model", "t.test p =", signif(sig$p.value,3))
-  plot(Lorder, finalvalues, main = title, xlab = "Injection Order", ylab = "Log Relative Intensity", col=Type, ylim = y.lim)
-  devAskNewPage(ask = TRUE)
+  y <- LogMeasurements[Type=='C',i]  #placing the measurements for a single compound into a vector
+  x <- Lorder[Type=='C'] #putting the injection order into another vector for model use
+  mod1 <- lm(y ~ x) #recreating mod1 for JUST the compound being tested
+  TotalDataForPredict=data.frame(x=Lorder) #prediction data frame init
+  predict.mod1 <- predict(mod1, newdata=TotalDataForPredict) #outputting predict() into a vector
+  finalvalues <- LogMeasurements[,i]  - predict.mod1 #subtracting the residuls (above output) to correct data based on subtracting residuals
+  sig <- t.test(finalvalues~Type) #perform parametric t-test with welch's correction on the data to test for case/control differences in means
+  title <- c(CompoundNames[,i], "Linear Model", "t.test p =", signif(sig$p.value,3)) #create a title vector inc. compound name and 
+  plot(Lorder, finalvalues, main = title, xlab = "Injection Order", ylab = "Log Relative Intensity", col=Type, ylim = y.lim) #
+  devAskNewPage(ask = TRUE) #ask for the user to press ENTER before producing the next graph
 }
 
-DoCorrection.Break <- function(i) {
+DoCorrection.Break <- function(i) { #as above, but for the stairstep model
   y <- LogMeasurements[Type=='C',i]
   x <- BreakSplit[Type=='C']
   mod2 <- lm(y ~ x)
@@ -272,7 +272,7 @@ DoCorrection.Break <- function(i) {
 #   cat("Break model:", "\n", "T-test p-value:", sig$p.value, "\n", "T-test q-value:", "\n", "Kruskal-Wallis p-value:", sig2$statistic, "\n", "\n") 
 # }
 
-pval.mod1 <- 0
+pval.mod1 <- 0 #initing vectors for use in later function
 pval.mod2 <- 0
 pval.mod3 <- 0
 DOC.mod1 <- 0
@@ -285,10 +285,10 @@ for(i in 1:nColumns) { #this way the results for all compounds, for each model, 
   mod1 <- lm(LogMeasurements[,i] ~ Lorder, subset = Type == 'C') #recreating model 1 in this fashion (for all compounds)
   mod2 <- lm(LogMeasurements[,i] ~ BreakSplit, subset = Type == 'C') #same for model 2 (stairstep)
   mod3 <- lm(LogMeasurements[,i] ~ Type + Lorder) #and for model 3 "confounder" - a linear regresssion as in mod1, but with case/control split as primary variable
-  pval.mod1[i] <- summary(mod1)$coef[2,4] #
+  pval.mod1[i] <- summary(mod1)$coef[2,4] #produce pvalues for each model
   pval.mod2[i] <- summary(mod2)$coef[2,4]
   pval.mod3[i] <- summary(mod3)$coef[2,4]
-  DOC.mod1[i] <- summary(mod1)$coef[1,3]
+  DOC.mod1[i] <- summary(mod1)$coef[1,3] #and use one of the column summaries (t sign) to get the direction of change (between cases/controls) of the compound for each model
   DOC.mod2[i] <- summary(mod2)$coef[1,3]
 }
 
