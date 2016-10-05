@@ -5,9 +5,6 @@
 #This script has the main functions and input code for the metabolomics project
 #Secondary functions are imported as necessary
 
-library(qvalue) #import qvalue library
-source ("project_0-2.R")
-
 Metab <- 0
 InjOrder <- 0
 myfile <- 0
@@ -19,6 +16,8 @@ if( sum (grepl ("qvalue", CheckInstalled) ) == 0 ) { #if qvalue is not installed
   stop(NoQvalue) #Print the above message, and we want to terminate the program...
 }
 
+library(qvalue) #import qvalue library
+source ("project_0-2.R")
 # check and store file here
 
 WD <- getwd() #set working directory for the project as wherever the script is opened
