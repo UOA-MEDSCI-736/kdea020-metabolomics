@@ -4,7 +4,7 @@
 > -- *"[Why Is Random Sampling Important?](https://www.ma.utexas.edu/users/mks/statmistakes/RandomSampleImportance.html)" - Martha K. Smith, 2012*
 
 <hr/>
-NORAND
+NOvel R script for  NORAND
 =======
 
 ------------------------------------------------------------------------
