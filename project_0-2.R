@@ -17,8 +17,10 @@ citeQ <- "John D. Storey with contributions from Andrew J. Bass, Alan Dabney and
   discovery rate control. R package version 2.4.2. http://github.com/jdstorey/qvalue"
 # cat("This script uses the Q-value package from the open-source project Bioconductor:", "\n", citeQ, "\n")
 
-myfile <- as.character("Hair.csv")
-read.csv('Hair.csv')->Metab
+# myfile <- as.character("Hair.csv")
+# read.csv('Hair.csv')->Metab
+myfile <- as.character("RawData.csv")
+read.csv('RawData.csv')->Metab
 read.csv('inj_order_SGA_hair.csv')->InjOrder #load injection order data file with equipment status
 
 MetabInfo<-Metab #dump Metab into MetabInfo
@@ -102,7 +104,7 @@ mkSingleGraphNORDER <- function(d) { #d = no. of compound you want to plot
   #Should probably include a legend for Type/Colouring
 }
 
-y.lim <- c(-1, 3)
+y.lim <- c(-2, 3)
 
 mkSingleGraphLog <- function(b) { #b = no. of compound you want to plot - log scale, and by injection order
   # - Plotting things out, inc. model
@@ -110,7 +112,7 @@ mkSingleGraphLog <- function(b) { #b = no. of compound you want to plot - log sc
   x<-Lorder[Type=='C']
   mod1 <- lm(y~x)
   titleLog <- c(CompoundNames[,b], "R^2 = ", signif(summary(mod1)$r.squared,3) )
-  plot(Lorder, LogMeasurements[,b], main = titleLog, xlab = "Injection Order", ylab = "Log Relative Intensity", col=Type, ylim = y.lim)
+  plot(Lorder, LogMeasurements[,b], main = titleLog, xlab = "Injection Order", ylab = "Log Relative Intensity", col=Type)#, ylim = y.lim)
   abline(mod1)
   X <- subset(LogMeasurements[,b], Type == "C")
   Y <- subset(LogMeasurements[,b], Type == "S")
@@ -158,12 +160,12 @@ mkGraphName <- function() {
       readline("Error. Please enter a positive integer: ") -> SelectiveInput #Throw up an error and ask them to try again
       SelectiveInput <- ifelse(grepl("[^0-9]", SelectiveInput),NA,as.integer(SelectiveInput)) #Please get it right this time, user
     }
-    cat("Plot", alphabeta[SelectiveInput], "as log?", " ")
-    readline(prompt = "Y / N: ") -> YorN
-    if(grepl("Y", YorN, ignore.case = TRUE) == TRUE) {
-      mkSingleGraphLog(collookup[SelectiveInput])
+    cat("Plot", alphabeta[SelectiveInput], "as log?", " ") #ask for Y/N as to whether the user wants to plot on log scale
+    readline(prompt = "Y / N: ") -> YorN #assign the input to a vector for later use
+    if(grepl("Y", YorN, ignore.case = TRUE) == TRUE) { #if vector YorN matches "Y/y", then...
+      mkSingleGraphLog(collookup[SelectiveInput]) #Make a graph based on the integer provided on log scale
     }
-    if(grepl("N", YorN, ignore.case = TRUE) == TRUE) {
+    if(grepl("N", YorN, ignore.case = TRUE) == TRUE) { #Or if it matches "N/n" then plot on standard scale
     mkSingleGraph(collookup[SelectiveInput])
     }
   }
@@ -186,37 +188,36 @@ BreakSplitC <- subset(BreakSplit, Type == "C")
 
 #a logical value that will factor Lorder into two levels at the split
 
-LogMeasurementsC <- subset(LogMeasurements, Type == "C")
-LogMeasurementsS <- subset(LogMeasurements, Type == "S")
+LogMeasurementsC <- subset(LogMeasurements, Type == "C") #making subsets of LogMeasurements containing only 
+LogMeasurementsS <- subset(LogMeasurements, Type == "S") #cases or controls, for brevity in later functions
 
-Stairstep.df=data.frame(BreakSplitC = rep(0, length(LogMeasurements) ) )
-Stairstep.df=data.frame(BreakSplitC = BreakSplit)
+Stairstep.df=data.frame(BreakSplitC = rep(0, length(LogMeasurements) ) ) #this creates an "empty" dataframe of the same length of LogMeasurements
+Stairstep.df=data.frame(BreakSplitC = BreakSplit) #so that the predict() function has appropriate input
 
 #From here on out, just looking at log(relative intensity) as a scaling normalisation step
 
-mod2 <- lm(LogMeasurementsC ~ BreakSplitC)
-summ.mod2 <- summary(mod2)
-predict.mod2 <- predict(mod2, Stairstep.df = Stairstep.df)
+mod2 <- lm(LogMeasurementsC ~ BreakSplitC) #init the stairstep model as mod2, using before/after break controls as a divider
+summ.mod2 <- summary(mod2) #assign the summary of the model statistics to a vector
+predict.mod2 <- predict(mod2, Stairstep.df = Stairstep.df) #create a vector for predictions using the earlier dataframe
 
-
-R2.Break <- 0
+R2.Break <- 0 #init a new vector for storing R^2s
 
 AllR2.Break <- function(i) { #where the input is the number of the compound name, and the break R^2
   Reg <- regexpr("r.squared = ", summ.mod2[i]) #the regular expresssions are necessary
   RegStart <- Reg+12                           #as summary()$r.squared seems to run into problems with the break model (mod2)
   RegEnd <- Reg+28
-  R2.Break[i] <- substring(grep("[\\d+]", summ.mod2[i], ignore.case = TRUE, value = TRUE), RegStart,RegEnd)
-  cat(signif(as.numeric(R2.Break[i]),3), "\n" )
+  R2.Break[i] <- substring(grep("[\\d+]", summ.mod2[i], ignore.case = TRUE, value = TRUE), RegStart,RegEnd) #put the digits corresponding to the R^2 into a string
+  cat(signif(as.numeric(R2.Break[i]),3), "\n" ) #reduce to
 }
 
 R2.Linear <- 0
-
+#Doing the same as above but for linear model R^2s
 AllR2.Linear <- function(i) {
   mod1 <- lm(LogMeasurements[,i]~Lorder, subset=Type=='C')
   cat(CompoundNames[,i], "\t", signif(summary(mod1)$r.squared,3), "\t" )
 }
 
-GetAllR2 <- function() {
+GetAllR2 <- function() { #A function to output the R^2s for both models comparatively in a .tdt (tab-delimited) compatible format
   cat("Compound", "\t", "LINEAR R^2", "\t", "BREAK R^2", "\n")
   for (i in seq_along(CompoundNames)) {
     AllR2.Linear(i)
@@ -224,20 +225,20 @@ GetAllR2 <- function() {
   }
 }
 
-DoCorrection.Linear <- function(i) {
-  y <- LogMeasurements[Type=='C',i]
-  x <- Lorder[Type=='C']
-  mod1 <- lm(y ~ x)
-  TotalDataForPredict=data.frame(x=Lorder)
-  predict.mod1 <- predict(mod1, newdata=TotalDataForPredict)
-  finalvalues <- LogMeasurements[,i]  - predict.mod1
-  sig <- t.test(finalvalues~Type)
-  title <- c(CompoundNames[,i], "Linear Model", "t.test p =", signif(sig$p.value,3))
-  plot(Lorder, finalvalues, main = title, xlab = "Injection Order", ylab = "Log Relative Intensity", col=Type, ylim = y.lim)
-  devAskNewPage(ask = TRUE)
+DoCorrection.Linear <- function(i) { #this function performs corrections to the data based on the linear model (centering, scaling, subtraction of residuals)
+  y <- LogMeasurements[Type=='C',i]  #placing the measurements for a single compound into a vector
+  x <- Lorder[Type=='C'] #putting the injection order into another vector for model use
+  mod1 <- lm(y ~ x) #recreating mod1 for JUST the compound being tested
+  TotalDataForPredict=data.frame(x=Lorder) #prediction data frame init
+  predict.mod1 <- predict(mod1, newdata=TotalDataForPredict) #outputting predict() into a vector
+  finalvalues <- LogMeasurements[,i]  - predict.mod1 #subtracting the residuls (above output) to correct data based on subtracting residuals
+  sig <- t.test(finalvalues~Type) #perform parametric t-test with welch's correction on the data to test for case/control differences in means
+  title <- c(CompoundNames[,i], "Linear Model", "t.test p =", signif(sig$p.value,3)) #create a title vector inc. compound name and 
+  plot(Lorder, finalvalues, main = title, xlab = "Injection Order", ylab = "Log Relative Intensity", col=Type, ylim = y.lim) #
+  devAskNewPage(ask = TRUE) #ask for the user to press ENTER before producing the next graph
 }
 
-DoCorrection.Break <- function(i) {
+DoCorrection.Break <- function(i) { #as above, but for the stairstep model
   y <- LogMeasurements[Type=='C',i]
   x <- BreakSplit[Type=='C']
   mod2 <- lm(y ~ x)
@@ -271,34 +272,36 @@ DoCorrection.Break <- function(i) {
 #   cat("Break model:", "\n", "T-test p-value:", sig$p.value, "\n", "T-test q-value:", "\n", "Kruskal-Wallis p-value:", sig2$statistic, "\n", "\n") 
 # }
 
-pval.mod1 <- 0
+pval.mod1 <- 0 #initing vectors for use in later function
 pval.mod2 <- 0
 pval.mod3 <- 0
+DOC.mod1 <- 0
+DOC.mod2 <- 0
 
 #qval stuff, also making model3
 #
 
-for(i in 1:nColumns) {
-  mod1 <- lm(LogMeasurements[,i] ~ Lorder, subset = Type == 'C')
-  mod2 <- lm(LogMeasurements[,i] ~ BreakSplit, subset = Type == 'C')
-  mod3 <- lm(LogMeasurements[,i] ~ Type + Lorder)
-  pval.mod1[i] <- summary(mod1)$coef[2,4]
+for(i in 1:nColumns) { #this way the results for all compounds, for each model, will be stored in globally-accessible matrices for later use
+  mod1 <- lm(LogMeasurements[,i] ~ Lorder, subset = Type == 'C') #recreating model 1 in this fashion (for all compounds)
+  mod2 <- lm(LogMeasurements[,i] ~ BreakSplit, subset = Type == 'C') #same for model 2 (stairstep)
+  mod3 <- lm(LogMeasurements[,i] ~ Type + Lorder) #and for model 3 "confounder" - a linear regresssion as in mod1, but with case/control split as primary variable
+  pval.mod1[i] <- summary(mod1)$coef[2,4] #produce pvalues for each model
   pval.mod2[i] <- summary(mod2)$coef[2,4]
   pval.mod3[i] <- summary(mod3)$coef[2,4]
+  DOC.mod1[i] <- summary(mod1)$coef[1,3] #and use one of the column summaries (t sign) to get the direction of change (between cases/controls) of the compound for each model
+  DOC.mod2[i] <- summary(mod2)$coef[1,3]
 }
 
-qvals.mod1 <- signif(qvalue(pval.mod1, lambda=0.01)$qval, 3) #computes B-H q value
-qvals.mod2 <- signif(qvalue(pval.mod2, lambda=0.01)$qval, 3)
-qvals.mod3 <- signif(qvalue(pval.mod3, lambda=0.01)$qval, 3)
+qvals.mod1 <- signif(qvalue(pval.mod1, lambda=0.01)$qval, 3) #computes Benjamini-Hochburg qvalue for mod1, limits to 3 significant figures for readability
+qvals.mod2 <- signif(qvalue(pval.mod2, lambda=0.01)$qval, 3) #"" "" for mod 2
+qvals.mod3 <- signif(qvalue(pval.mod3, lambda=0.01)$qval, 3) #"" ""for mod 3
 
 
-ShowAndTell <- function(i) { #this function produces a set of graphs for a given compound
+ShowAndTell <- function(i) { #this function produces the full set of graphs for a given compound, where i is the rownumber of that compound in Metab[]
   mkSingleGraphLog(i)
   DoCorrection.Linear(i)
   DoCorrection.Break(i)
-  cat(CompoundNames[,i], "\n", "Type covar. p-value:", pval.mod3[i], "\n", "Q-values for each model:", "\n", "Linear:", qvals.mod1[i], "\n", "Step:", qvals.mod2[i], "\n", "Linear covar. with Type:", qvals.mod3[i], "\n")
-}
+  cat(CompoundNames[,i], "\n", "Type covar. p-value:", pval.mod3[i], "\n", "Q-values for each model:", "\n", "Linear:", qvals.mod1[i], "\n", "Step:", qvals.mod2[i], "\n", "Linear covar. with Type:", qvals.mod3[i], "\n", "DOC1:", DOC.mod1[i], "\n", "DOC2:", DOC.mod2[i], "\n")
+} #and gives descriptive output as required
 
-source("TESTING.R")
-#Make name input process modular, with compound number output going into any number of other specified functions?
-#Cite use of Bioconductor Q-value package in markdown and script! Use: ' citation("qvalue") '
+source("TESTING.R") #this runs all tests for the script, using the testthat package, in a separate file
