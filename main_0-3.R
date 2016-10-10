@@ -18,8 +18,9 @@ if( sum (grepl ("qvalue", CheckInstalled) ) == 0 ) { #if qvalue is not installed
 }
 
 library(qvalue) #import qvalue library
-source ("project_0-2.R")
-# check and store file here
+# source ("project_0-2.R")
+source ("plotfunctions.R")
+source ("statfunctions.R")
 
 WD <- getwd() #set working directory for the project as wherever the script is opened
 # cat("Working directory is:", WD)
@@ -99,22 +100,5 @@ InputFiles <- function() { #Init a function to allow for the user to input their
 
 InputFiles()
 
-MetabInfo<-Metab #dump Metab into MetabInfo
-CompoundNames<-MetabInfo[1]
-CompoundNames<-t(CompoundNames)
-Metab<-Metab[,-c(1)] #subtract compound names
-Metab<-t(Metab) #Values from rows into columns, so sample names are on rows
-Metab<-as.data.frame(Metab)
-Missing<-is.na(Metab) #Allows to check for NA values (reports TRUE/FALSE for each value)
-nColumns<-dim(Metab)[2] #no. of columns is set to dimensions of Metab columns
-nRows<-dim(Metab)[1]
-# - So now data is set up so that Metab[2,4] = [S04, Compound 4 value] etc.
-
-# - Get C or S for each sample so can do just of one group
-Type<-substr(rownames(Metab),1,1) #Grab first letter of rownames
-Type[Type=='X']<-'Sample' #Define as either C or S for each sample
-Type<-factor(Type) #Coerce vector Type to a factor with two levels (C and S)
-
-#UserInput()
-
-# source("TESTING.R")
+source ("datahandlingfunctions.R")
+source("TESTING.R")
