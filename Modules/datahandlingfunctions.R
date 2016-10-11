@@ -62,3 +62,45 @@ for (i in 1:nrowsMetabNames) {
   Lorder[i] <- RowMatch(i)
 }
 Lorder <- as.numeric(Lorder)
+
+ShowAndTell <- function(i) { #this function produces the full set of graphs for a given compound, where i is the rownumber of that compound in Metab[]
+  mkSingleGraphLog(i)
+  DoCorrection.Linear(i)
+  DoCorrection.Break(i)
+  cat(CompoundNames[,i], "\n", "Type covar. p-value:", pval.mod3[i], "\n", "Q-values for each model:", "\n", "Linear:", qvals.mod1[i], "\n", "Step:", qvals.mod2[i], "\n", "Linear covar. with Type:", qvals.mod3[i], "\n", "DOC1:", DOC.mod1[i], "\n", "DOC2:", DOC.mod2[i], "\n")
+} #and gives descriptive output as required
+
+UserInput <- function() {
+  nameinput <- readline(prompt = "Enter a compound name: ") #prompt user for input
+  nameinput <- ifelse(grepl("[^A-Za-z0-9]", nameinput),NA,nameinput) # if the input isn't a text string (including digits), mark as NA
+  if (is.na(nameinput)) { #if it doesn't find a match in the compound names...
+    cat("'", nameinput, "'", "is not a valid text string for matching! Please try again.") #throw up an error for the user
+  }
+  else #if it DOES find a match
+    collookup <- grep(nameinput, CompoundNames, ignore.case = TRUE, value = FALSE) #looks up column compound names, returns column number
+  # now need to sort out if grep returns more than one value (i.e. search "Alanine", get Phenylalanine AND Alanine)
+  alphabeta <- grep(nameinput, CompoundNames, ignore.case = TRUE, value = TRUE) #get the corresponding match names from a repeat grep
+  nMatches <- length(collookup) #store "length" (i.e. number) of lookups
+  
+  if (nMatches == 1) { #if length is equal to 1, there's only one option
+    ShowAndTell(collookup) #print the plots
+  }
+  if (nMatches > 1) {  #if more than one match was obtained...
+    cat(nMatches, "matches found. Which option do you want to plot?") #print a descriptive message asking for input
+    state <- 1 #just an iterator variable for the following loop
+    for(i in collookup){ #for as many values as collookup has (i.e. no. of matches returned)
+      cat("\n", " ", alphabeta[state], " ", "(",state,")") #print the match name, and number (for user input), each on a new line
+      state <- state+1 #increase the iterator so we move through the values
+    }
+    readline("Enter a positive integer: ") -> SelectiveInput #this is where we ask for input in the form of a +ve integer, corresponding to above matches
+    SelectiveInput <- ifelse(grepl("[^0-9]", SelectiveInput),NA,as.integer(SelectiveInput)) #if they don't give us a +ve integer, mark as NA
+    while (is.na(SelectiveInput)) { #As long as the input is set as "NA"
+      readline("Error. Please enter a positive integer: ") -> SelectiveInput #Throw up an error and ask them to try again
+      SelectiveInput <- ifelse(grepl("[^0-9]", SelectiveInput),NA,as.integer(SelectiveInput)) #Please get it right this time, user
+    }
+    ShowAndTell(collookup[SelectiveInput]) #print the plots
+  }
+  if(nMatches == 0) { #if no matches found...
+    cat("No matches found for string", "'", nameinput, "'") #throw up an error message
+  }
+}
