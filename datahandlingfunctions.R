@@ -1,3 +1,6 @@
+#NoRAND functions for data import and processing
+#K. Deane-Alder, 2016
+#Licensed under CC-BY 3.0 NZ
 
 MetabInfo<-Metab #dump Metab into MetabInfo
 CompoundNames<-MetabInfo[1]

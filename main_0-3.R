@@ -1,8 +1,8 @@
-#Ver. 0.3
-#Script (C) 2016 K. Deane-Alder
+#NoRAND main script - RUN THIS!
+#K. Deane-Alder, 2016
 #Licensed under CC-BY 3.0 NZ
 
-#This script has the main functions and input code for the metabolomics project
+#This script has the main functions and input code for NoRAND
 #Secondary functions are imported as necessary
 
 Metab <- 0

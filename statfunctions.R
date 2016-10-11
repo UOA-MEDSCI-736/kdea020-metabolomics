@@ -1,4 +1,8 @@
-library(qvalue)
+#NoRAND statistics functions
+#K. Deane-Alder, 2016
+#Licensed under CC-BY 3.0 NZ
+
+library(qvalue) #Imports qvalue
 
 # - Making linear models
 

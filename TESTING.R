@@ -1,12 +1,9 @@
 #TESTING
-#Write a battery of tests for functions and source this file at the end.
-#then use test_file(file.r) in main script to import tests
-#test that vectors include their expected values and attributes?
-#I.e. is a matrix, is the right length, or has ONLY numeric variables, or has BOTH numerics and strings...
+#K. Deane-Alder, 2016
+#Licensed under CC-BY 3.0 NZ
 
-# ADD ACCEPTANCE CRITERIA FOR SCRUM BOARD CARDS
-
-library(testthat)
+library(testthat) #Testthat package by Hadley, W.
+#Details
 
 #Input tests
 test_that("R has read the file correctly", { #testing for reading
