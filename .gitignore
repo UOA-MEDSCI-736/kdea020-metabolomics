@@ -3,6 +3,14 @@
 .RData
 .Ruserdata
 project_0-1.R
+project_0-2.R
 NLDL Data
 exports
 *.png
+RawData.csv
+project_0-2.html
+plotfunctions.Rout
+test.html
+test.Rmd
+kdea020-medsci736-plotting.R
+*.odt#

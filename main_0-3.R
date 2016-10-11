@@ -10,7 +10,7 @@ InjOrder <- 0
 myfile <- 0
 
 CheckInstalled <- installed.packages() #in order to check whether the user has bioconductor installed, which is a dependency of this script
-                                      #justification for this approach is in the readme.md on GIT
+                                       #justification for this approach is in the readme.md on GIT
 
 if( sum (grepl ("qvalue", CheckInstalled) ) == 0 ) { #if qvalue is not installed...
   NoQvalue <- c("Bioconductor qvalue package not installed! Please install it.", "\n", "For instructions to install Qvalue package, go to https://bioconductor.org/packages/release/bioc/html/qvalue.html")
