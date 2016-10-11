@@ -18,9 +18,8 @@ if( sum (grepl ("qvalue", CheckInstalled) ) == 0 ) { #if qvalue is not installed
 }
 
 library(qvalue) #import qvalue library
-# source ("project_0-2.R")
-source ("plotfunctions.R")
-source ("statfunctions.R")
+source ("../Modules/plotfunctions.R")
+source ("../Modules/statfunctions.R")
 
 WD <- getwd() #set working directory for the project as wherever the script is opened
 # cat("Working directory is:", WD)
@@ -79,8 +78,8 @@ InputFiles <- function() { #Init a function to allow for the user to input their
   else #If it's a Y...
     if(grepl("Y", default, ignore.case = TRUE) == TRUE) {
       myfile <<- as.character("Hair.csv") #Default main dataset name
-      read.csv('Hair.csv')->>Metab #Assigning to a data frame as a global
-      read.csv('inj_order_SGA_hair.csv')->>InjOrder #load injection order data file with equipment status
+      read.csv('../example data/Hair.csv')->>Metab #Assigning to a data frame as a global
+      read.csv('../example data/inj_order_SGA_hair.csv')->>InjOrder #load injection order data file with equipment status
       UserInput() #Run the UserInput function
     }
   if(grepl("N", default, ignore.case = TRUE) == TRUE) { #But if it's an N (the use wants to specify their own dataset)...
@@ -100,5 +99,5 @@ InputFiles <- function() { #Init a function to allow for the user to input their
 
 InputFiles()
 
-source ("datahandlingfunctions.R")
-source("TESTING.R")
+source ("../Modules/datahandlingfunctions.R")
+source("../Modules/TESTING.R")
