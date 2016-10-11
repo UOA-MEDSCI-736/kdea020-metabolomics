@@ -36,7 +36,7 @@ AllR2.Break <- function(i) { #where the input is the number of the compound name
   RegStart <- Reg+12                           #as summary()$r.squared seems to run into problems with the break model (mod2)
   RegEnd <- Reg+28
   R2.Break[i] <- substring(grep("[\\d+]", summ.mod2[i], ignore.case = TRUE, value = TRUE), RegStart,RegEnd) #put the digits corresponding to the R^2 into a string
-  cat(signif(as.numeric(R2.Break[i]),3), "\n" ) #reduce to
+  cat(signif(as.numeric(R2.Break[i]),3), "\n" ) #reduce to 3 sig fig
 }
 
 R2.Linear <- 0
@@ -47,6 +47,7 @@ AllR2.Linear <- function(i) {
 }
 
 GetAllR2 <- function() { #A function to output the R^2s for both models comparatively in a .tdt (tab-delimited) compatible format
+                         #NEED TO MAKE OUTPUT to "NoRAND_R2.tdt"
   cat("Compound", "\t", "LINEAR R^2", "\t", "BREAK R^2", "\n")
   for (i in seq_along(CompoundNames)) {
     AllR2.Linear(i)

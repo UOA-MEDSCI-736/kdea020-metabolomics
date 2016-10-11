@@ -62,6 +62,7 @@ InputFiles <- function() { #Init a function to allow for the user to input their
     source ("../Modules/plotfunctions.R")
     source ("../Modules/statfunctions.R")
     UserInput()
+    GetAllR2()
   }
 }
 

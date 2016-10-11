@@ -30,10 +30,10 @@ test_that("The (double) vector Lorder is storing the properly ordered output val
  expect_equal(MatchCheck, Lorder[33]) #If correct, the row numbers for values from RowMatch(CompoundNo.)[1] and Lorder should match.
 } )
 
-# test_that("", {
-#    
+# test_that("", { # TEST FOR R2 output function
+#                 # give fake input/output
 # })
 
-# test_that("", {
+# test_that("", { # TEST for... someting?
 #   
 # })
