@@ -1,8 +1,8 @@
-#Ver. 0.3
-#Script (C) 2016 K. Deane-Alder
+#NoRAND main script - RUN THIS!
+#K. Deane-Alder, 2016
 #Licensed under CC-BY 3.0 NZ
 
-#This script has the main functions and input code for the metabolomics project
+#This script has the main functions and input code for NoRAND
 #Secondary functions are imported as necessary
 
 Metab <- 0
@@ -10,6 +10,7 @@ InjOrder <- 0
 myfile <- 0
 
 CheckInstalled <- installed.packages() #in order to check whether the user has bioconductor installed, which is a dependency of this script
+                                       #justification for this approach is in the readme.md on GIT
 
 if( sum (grepl ("qvalue", CheckInstalled) ) == 0 ) { #if qvalue is not installed...
   NoQvalue <- c("Bioconductor qvalue package not installed! Please install it.", "\n", "For instructions to install Qvalue package, go to https://bioconductor.org/packages/release/bioc/html/qvalue.html")
@@ -17,8 +18,8 @@ if( sum (grepl ("qvalue", CheckInstalled) ) == 0 ) { #if qvalue is not installed
 }
 
 library(qvalue) #import qvalue library
-source ("project_0-2.R")
-# check and store file here
+source ("../Modules/plotfunctions.R")
+source ("../Modules/statfunctions.R")
 
 WD <- getwd() #set working directory for the project as wherever the script is opened
 # cat("Working directory is:", WD)
@@ -77,8 +78,8 @@ InputFiles <- function() { #Init a function to allow for the user to input their
   else #If it's a Y...
     if(grepl("Y", default, ignore.case = TRUE) == TRUE) {
       myfile <<- as.character("Hair.csv") #Default main dataset name
-      read.csv('Hair.csv')->>Metab #Assigning to a data frame as a global
-      read.csv('inj_order_SGA_hair.csv')->>InjOrder #load injection order data file with equipment status
+      read.csv('../example data/Hair.csv')->>Metab #Assigning to a data frame as a global
+      read.csv('../example data/inj_order_SGA_hair.csv')->>InjOrder #load injection order data file with equipment status
       UserInput() #Run the UserInput function
     }
   if(grepl("N", default, ignore.case = TRUE) == TRUE) { #But if it's an N (the use wants to specify their own dataset)...
@@ -98,22 +99,5 @@ InputFiles <- function() { #Init a function to allow for the user to input their
 
 InputFiles()
 
-MetabInfo<-Metab #dump Metab into MetabInfo
-CompoundNames<-MetabInfo[1]
-CompoundNames<-t(CompoundNames)
-Metab<-Metab[,-c(1)] #subtract compound names
-Metab<-t(Metab) #Values from rows into columns, so sample names are on rows
-Metab<-as.data.frame(Metab)
-Missing<-is.na(Metab) #Allows to check for NA values (reports TRUE/FALSE for each value)
-nColumns<-dim(Metab)[2] #no. of columns is set to dimensions of Metab columns
-nRows<-dim(Metab)[1]
-# - So now data is set up so that Metab[2,4] = [S04, Compound 4 value] etc.
-
-# - Get C or S for each sample so can do just of one group
-Type<-substr(rownames(Metab),1,1) #Grab first letter of rownames
-Type[Type=='X']<-'Sample' #Define as either C or S for each sample
-Type<-factor(Type) #Coerce vector Type to a factor with two levels (C and S)
-
-#UserInput()
-
-# source("TESTING.R")
+source ("../Modules/datahandlingfunctions.R")
+source("../Modules/TESTING.R")
