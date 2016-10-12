@@ -8,6 +8,7 @@ y.lim <- c(-2, 3)
 
 mkSingleGraphLog <- function(b) { #b = no. of compound you want to plot - log scale, and by injection order
   # - Plotting things out, inc. model
+  cat("Plotting...")
   y<-LogMeasurements[Type=='C',b]
   x<-Lorder[Type=='C']
   mod1 <- lm(y~x)

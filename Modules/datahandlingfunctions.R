@@ -71,7 +71,7 @@ ShowAndTell <- function(i) { #this function produces the full set of graphs for 
 } #and gives descriptive output as required
 
 UserInput <- function() {
-  nameinput <- readline(prompt = "Enter a compound name: ") #prompt user for input
+  nameinput <- readline(prompt = "Enter a compound name, or press [RETURN] to list all compounds: ") #prompt user for input
   nameinput <- ifelse(grepl("[^A-Za-z0-9]", nameinput),NA,nameinput) # if the input isn't a text string (including digits), mark as NA
   if (is.na(nameinput)) { #if it doesn't find a match in the compound names...
     cat("'", nameinput, "'", "is not a valid text string for matching! Please try again.") #throw up an error for the user
@@ -92,7 +92,7 @@ UserInput <- function() {
       cat("\n", " ", alphabeta[state], " ", "(",state,")") #print the match name, and number (for user input), each on a new line
       state <- state+1 #increase the iterator so we move through the values
     }
-    readline("Enter a positive integer: ") -> SelectiveInput #this is where we ask for input in the form of a +ve integer, corresponding to above matches
+    readline("Enter a positive integer from the list above to select from multiple matching compounds: ") -> SelectiveInput #this is where we ask for input in the form of a +ve integer, corresponding to above matches
     SelectiveInput <- ifelse(grepl("[^0-9]", SelectiveInput),NA,as.integer(SelectiveInput)) #if they don't give us a +ve integer, mark as NA
     while (is.na(SelectiveInput)) { #As long as the input is set as "NA"
       readline("Error. Please enter a positive integer: ") -> SelectiveInput #Throw up an error and ask them to try again

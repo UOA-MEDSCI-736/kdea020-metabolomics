@@ -19,20 +19,23 @@ if( sum (grepl ("qvalue", CheckInstalled) ) == 0 ) { #if qvalue is not installed
 
 library(qvalue) #import qvalue library
 
+cat("Novel R script for the Analysis of Non-randomised Data (NoRAND) is a tool for producing interpretive statistics and modeling experimental error in non-randomised metabolomics datasets.", "\n", "\n")
+
+
 WD <- getwd() #set working directory for the project as wherever the script is opened
-cat("Working directory is:", WD)
+cat("Working directory is:", WD, "\n", "\n")
 
 # For citation:
 citeQ <- "John D. Storey with contributions from Andrew J. Bass, Alan Dabney and David Robinson (2015). qvalue: Q-value estimation for false
   discovery rate control. R package version 2.4.2. http://github.com/jdstorey/qvalue"
-# cat("This script uses the Q-value package from the open-source project Bioconductor:", "\n", citeQ, "\n")
+cat("This script uses the Q-value package from the open-source project Bioconductor:", "\n", citeQ, "\n")
 
 #BEGIN BASIC USER INPUT CODE
 
 library(testthat) #import testthat library
 
 InputFiles <- function() { #Init a function to allow for the user to input their own data files
-  default <- readline(prompt = "Use default dataset? Y / N: ") #ask the user if they want to use the default dataset file names, or to choose their own
+  default <- readline(prompt = "Use example dataset? Y / N: ") #ask the user if they want to use the default dataset file names, or to choose their own
   default <- ifelse(grepl("[^YNyn]", default),NA,default) #Check that the input is either Y or N (not case-sensitive) - set to NA if not
   if (is.na(default)) { #If not Y/N...
     cat("'", default, "'", "is not a Y or N! Please run NoRAND again.") #Throw up an error message
