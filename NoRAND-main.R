@@ -35,7 +35,7 @@ InputFiles <- function() { #Init a function to allow for the user to input their
   default <- readline(prompt = "Use default dataset? Y / N: ") #ask the user if they want to use the default dataset file names, or to choose their own
   default <- ifelse(grepl("[^YNyn]", default),NA,default) #Check that the input is either Y or N (not case-sensitive) - set to NA if not
   if (is.na(default)) { #If not Y/N...
-    cat("'", default, "'", "is not a Y or N! Please run NoRAND again again.") #Throw up an error message
+    cat("'", default, "'", "is not a Y or N! Please run NoRAND again.") #Throw up an error message
   }
   else #If it's a Y...
     if(grepl("Y", default, ignore.case = TRUE) == TRUE) {
