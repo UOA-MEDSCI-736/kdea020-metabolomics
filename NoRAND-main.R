@@ -20,7 +20,7 @@ if( sum (grepl ("qvalue", CheckInstalled) ) == 0 ) { #if qvalue is not installed
 library(qvalue) #import qvalue library
 
 WD <- getwd() #set working directory for the project as wherever the script is opened
-# cat("Working directory is:", WD)
+cat("Working directory is:", WD)
 
 # For citation:
 citeQ <- "John D. Storey with contributions from Andrew J. Bass, Alan Dabney and David Robinson (2015). qvalue: Q-value estimation for false
@@ -39,12 +39,12 @@ InputFiles <- function() { #Init a function to allow for the user to input their
   }
   else #If it's a Y...
     if(grepl("Y", default, ignore.case = TRUE) == TRUE) {
-      myfile <<- as.character("../example data/Hair.csv") #Default main dataset name
-      read.csv('../example data/Hair.csv') ->> Metab #Assigning to a data frame as a global
-      read.csv('../example data/inj_order_SGA_hair.csv') ->> InjOrder #load injection order data file with equipment status
-      source ("../Modules/datahandlingfunctions.R")
-      source ("../Modules/plotfunctions.R")
-      source ("../Modules/statfunctions.R")
+      myfile <<- as.character("example data/Hair.csv") #Default main dataset name
+      read.csv('example data/Hair.csv') ->> Metab #Assigning to a data frame as a global
+      read.csv('example data/inj_order_SGA_hair.csv') ->> InjOrder #load injection order data file with equipment status
+      source ("Modules/datahandlingfunctions.R")
+      source ("Modules/plotfunctions.R")
+      source ("Modules/statfunctions.R")
       UserInput() #Run the UserInput function
     }
   if(grepl("N", default, ignore.case = TRUE) == TRUE) { #But if it's an N (the use wants to specify their own dataset)...
@@ -58,9 +58,9 @@ InputFiles <- function() { #Init a function to allow for the user to input their
     cat(MetabChoose, InjChoose, myfile)
     Metab <<- read.csv(MetabChoose)
     InjOrder <<- read.csv(InjChoose)
-    source ("../Modules/datahandlingfunctions.R")
-    source ("../Modules/plotfunctions.R")
-    source ("../Modules/statfunctions.R")
+    source ("Modules/datahandlingfunctions.R")
+    source ("Modules/plotfunctions.R")
+    source ("Modules/statfunctions.R")
     UserInput()
     GetAllR2()
   }
@@ -68,4 +68,4 @@ InputFiles <- function() { #Init a function to allow for the user to input their
 
 InputFiles()
 
-source ("../Modules/TESTING.R")
+source ("Modules/TESTING.R")

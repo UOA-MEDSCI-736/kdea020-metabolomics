@@ -61,8 +61,6 @@ pval.mod3 <- 0
 DOC.mod1 <- 0
 DOC.mod2 <- 0
 
-#qval stuff, also making model3
-#
 
 for(i in 1:nColumns) { #this way the results for all compounds, for each model, will be stored in globally-accessible matrices for later use
   mod1 <- lm(LogMeasurements[,i] ~ Lorder, subset = Type == 'C') #recreating model 1 in this fashion (for all compounds)
