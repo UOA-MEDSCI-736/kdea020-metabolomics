@@ -1,0 +1,18 @@
+open code license: MIT
+creativecommons.org
+
+CC: 
+
+CC0: 
+
+NC: you can use this but you can't sell the derivative
+	- if you're not gonna commercialise it, 
+	- ...might as well leave it out
+
+BY: you attribute where you obtained the material from
+
+SA: share alike
+	- 
+
+ND: no derivative
+
