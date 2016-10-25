@@ -32,14 +32,14 @@ _for instance, a user might have R/Python but might not have all the packages_
 
 =======
 <hr/>
-NOvel R script for  NORAND
+Novel R script for the Analysis of Non-randomised Data (NoRAND)
 =======
 
 ------------------------------------------------------------------------
 
-**NORAND** is a simple program designed to perform basic interpretive statistics on non-randomised metabolomics data. 
+**NoRAND** is a simple program designed to perform basic interpretive statistics on non-randomised metabolomics data. 
 
-The main NORAND functions:
+The main NoRAND functions:
 
 - something
 - Another thing.
@@ -53,12 +53,14 @@ You can install:
 
 
 
-Using NORAND
+Using NoRAND
 -------------
 
-NORAND includes a set of example data (in "/example data/") 
+NoRAND includes a set of example data (in "/example data/") 
 
 Below are quick examples of how janitor tools are commonly used. A full description of each function can be found in janitor's [catalog of functions](https://github.com/sfirke/janitor/blob/master/vignettes/introduction.md).
+
+comparison of raw data files and R's processsing... also, graphs! example output!
 
 ### Choosing your own data
 
@@ -149,10 +151,10 @@ roster %>% get_dupes(first_name, last_name)
 Yes, some teachers appear twice. We ought to address this before counting employees.
 
 #### Producing R^2 output
+By default, NoRAND will produce an exported table, in .tdt (tab-delimited text file) format, of all R^2 values for each compound and both models.
 
+If the user does not desire this function, it may be disabled by commenting out the line (NO.) 'GetAllR2()' in NoRAND_main.R. Alternatively, if the user wishes to edit the output of the function or change the name of the file produced (for example) the function GetAllR2() is straightforward to edit, and located in modules/statfunctions.R.
 
-
-Together, these tabulation functions reduce R's deficit against Excel and SPSS when it comes to quick, informative counts.
 
 Contact me
 ----------
@@ -162,4 +164,3 @@ You are welcome to:
 -   submit suggestions on how to improve this software, and report bugs: <https://github.com/kdea020/metabolomics-project/issues>
 -   fork this project, edit it, or send a pull request: <https://github.com/kdea020/metabolomics-project>
 -   let me know if this has been useful for you!
->>>>>>> upstream/master
