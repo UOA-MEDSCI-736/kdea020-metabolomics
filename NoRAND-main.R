@@ -1,6 +1,6 @@
 #NoRAND main script - RUN THIS!
 #K. Deane-Alder, 2016
-#Licensed under CC-BY 3.0 NZ
+#Licensed under CC-BY 4.0
 
 #This script has the main functions and input code for NoRAND
 #Secondary functions are imported as necessary

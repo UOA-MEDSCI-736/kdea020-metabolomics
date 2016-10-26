@@ -1,6 +1,6 @@
 #NoRAND functions for plotting and graphing
 #K. Deane-Alder, 2016
-#Licensed under CC-BY 3.0 NZ
+#Licensed under CC-BY 4.0
 
 library(qvalue)
 
