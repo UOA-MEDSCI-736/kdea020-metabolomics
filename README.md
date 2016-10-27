@@ -1,38 +1,12 @@
-<hr/>
 > The mathematical theorems which justify most frequentist statistical procedures apply only to random samples.
 >
 > -- *"[Why Is Random Sampling Important?](https://www.ma.utexas.edu/users/mks/statmistakes/RandomSampleImportance.html)" - Martha K. Smith, 2012*
 
-<<<<<<< HEAD
-_this document is the first impression of the project_
-_please try to keep it simple yet interesting_
-_a good readme file will contribute to the mark for documentation_
-_please remove these instructions (in italics) in the final version_
-_feel free to adjust the instructions and/or their order as you see fit_
-
-## Project Description
-
-_insert a description of what the project is all about_
-_make only sensible assumptions about the domain knowledge of the user_
-_link to resources within your repo or other resources on the web if need be_
-
-Metabolomics Project Trello board:
-https://trello.com/b/YHwLrEsh/metabolomics-project-scrum-board
-
-## Data Description
-
-_indicate the size of the data_
-_provide a throrough metadata_
-
-## Running the program
-
-_insert instructions for repeating your work_
-_make only sensible assumptions about resources user needs_
-_for instance, a user might have R/Python but might not have all the packages_
 
 =======
-<hr/>
+<hr>
 Novel R script for the Analysis of Non-randomised Data (NoRAND)
+<hr/>
 =======
 
 ------------------------------------------------------------------------
@@ -41,119 +15,88 @@ Novel R script for the Analysis of Non-randomised Data (NoRAND)
 
 The main NoRAND functions:
 
-- something
-- Another thing.
-- At least one more thing.
+- Processing of non-randomised metabolomics data
+- Graphical output of compound abundance between samples
+- Comparative statistical models to estimate the contribution of Type I error in the sample
+- Parametric and non-parametric interpretive statistical output
 
 
-### Installation
-
-You can install:
+### Installation of NoRAND
 
 
+### Dependencies
+For interpretive statistics of metabolites, NoRAND employs the qvalue package from BioConductor. 
+
+### Runnning NoRAND
+It is highly recommended that you run NoRAND (NoRAND_main.R) through RStudio (LINK), as it provides an intuitive way of working with R scripts. This also makes it easy to save plots produced by the script, as one can simply right-click on the plot in the viewer window of RStudio and export an image file. However, NoRAND will still work without issue from the command line in Windows, Ubuntu 16.04, or MacOSX. Simply navigate to the "main" folder of NoRAN (where the readme D and type "Rscript NoRAND_main.R".
 
 
-Using NoRAND
+## Using NoRAND
 -------------
 
-NoRAND includes a set of example data (in "/example data/") 
+NoRAND includes a set of example data (in the folder example data/) 
 
-Below are quick examples of how janitor tools are commonly used. A full description of each function can be found in janitor's [catalog of functions](https://github.com/sfirke/janitor/blob/master/vignettes/introduction.md).
 
 comparison of raw data files and R's processsing... also, graphs! example output!
 
+
+### NoRAND's file format expectations
+NoRAND expects data in th
+
+#### Metabolite data
+NoRAND is designed to work with relative abundance values obtained from metabolomics experiments using mass spectrometry.
+
+#> Name	S02	S03	S04	S05	S06
+#> Aspartic acid	114.763241	101.7201702	108.9033102	87.91465664	102.4046656
+#> Phenylalanine	48.47677892	54.55288819	55.24501607	46.59827622	51.18515474
+#> Leucine	92.74353472	111.1656868	95.42636172	81.76610921	90.2420409
+#> Alanine	246.0528951	237.6442629	258.883971	180.6158395	284.2731637
+
+
+
+### Injection order data
+As NoRAND is based upon the analysis of samples by order, you must also provide it with the order in which the samples were run on the equipment. Each sample should be named as in the metabolite data file. Controls should be labelled as C## (where ## = 01, 02, 03...) and cases as S## (## = 01, 02, 03...). Tests and blanks or calibration samples should be labelled T## or B##.
+This should be ordered in three columns, the first having the injection order (beginning at 1) and the second containing the name of the sample. Please also indicate whether a sample is case or control in a third column (called, exactly, "Case control"). Blanks and tests should have this column remain empty (not 0) so that NoRAND will ignore them appropriately. Like so:
+
+#> injection order	Name case.control
+#> 1	T1                             
+#> 2	T2                 
+#> 3	T3
+#> 4	C1 1
+#> 5	C2 1
+#> 6	C3 1
+#> 7	C4 1
+#> 8	C5 1
+#> 9	C6 1
+#> 10	C7    1
+#> 11	C8    1
+#> 12	C9    1
+#> 13	C10   1
+#> 14	B1
+#> 15	B2
+#> 16	B3
+
+There must be exactly the same number of C/S samples in the injection order file as in the metabolite data, or NoRAND will not produce the correct output.
+
 ### Choosing your own data
+NoRAND employs R's inbuilt user interface for importing your own data into the script. Simply choose "N" at the "Use example data?" prompt when NoRAND is first run, and an explorer menu will pop up and allow you to navigate to your files of choice.
 
-Take this roster of teachers at a fictional American high school, stored in the Microsoft Excel file [dirty\_data.xlsx](https://github.com/sfirke/janitor/blob/master/dirty_data.xlsx): ![All kinds of dirty.](dirty_data.PNG)
 
-Dirtiness includes:
+### Adjusting program parameters
 
--   Dreadful column names
--   Rows and columns containing Excel formatting but no data
--   Dates stored as numbers
--   Values spread inconsistently over the "Certification" columns
+#### Step model
+The step model estimates the effect of a "break" in measurements - this is to correct for the rare circumstance of a "batch" effect with only two batches. In the example data, this break occured at sample C36. If you are using NoRAND to analyse your own data, and you suspect a similar event has occured during your data collection procedures, you may alter a parameter to reflect the individual circumstance of your data. In Modules/statfunctions.R, line 10, the vector "IsBreak" is a numeric that contains a listed sample number, as found in the vector Lorder. This value should be changed to the subset of Lorder (i.e. Lorder[36]) that corresponds to the last sample measured before the break in measurements.
 
-Here's that data after being read in to R:
+#### Plotting
+To ensure comparability between plots when assessing model quality, NoRAND uses a fixed Y axis scale for log(metabolite relative abundance). By default, when plotting on log scale NoRAND will scale from -2 to +3 orders of magnitude. If you are working with data that needs a larger y axis - such as a raw, non-normalised dataset for prospective analysis - you can change the values in the vector "y.lim" on line 7 of Modules/plotfunctions.R from c(-2,3) to whatever you like, with the format " y.lim <- c([lowerlimit],[upperlimit]) ". The logarithmic plots will still be displayed on the same scale, now with your specified scaling.
 
-``` r
-library(pacman) # for loading packages
-p_load(readxl, janitor, dplyr)
+#### Interpretive statistics
+NoRAND's q-value procedures use a lambda cutoff of 0.01 (following Benjamini-Hochburg). If you wish to use a more stringent, or relaxed, false discovery rate cutoff, you can alter the "lambda" setting for vectors "qvals.mod[1-3]" in lines 78-80 of Modules/statfunctions.R.
 
-roster_raw <- read_excel("dirty_data.xlsx") # available at http://github.com/sfirke/janitor
-glimpse(roster_raw)
-#> Observations: 17
-#> Variables: 12
-#> $ First Name        <chr> "Jason", "Jason", "Alicia", "Ada", "Desus", "Chien-Shiung", "Chien-Shiung", NA,...
-#> $ Last Name         <chr> "Bourne", "Bourne", "Keys", "Lovelace", "Nice", "Wu", "Wu", NA, "Joyce", "Lamar...
-#> $ Employee Status   <chr> "Teacher", "Teacher", "Teacher", "Teacher", "Administration", "Teacher", "Teach...
-#> $ Subject           <chr> "PE", "Drafting", "Music", NA, "Dean", "Physics", "Chemistry", NA, "English", "...
-#> $ Hire Date         <dbl> 39690, 39690, 37118, 27515, 41431, 11037, 11037, NA, 32994, 27919, 42221, 34700...
-#> $ % Allocated       <dbl> 0.75, 0.25, 1.00, 1.00, 1.00, 0.50, 0.50, NA, 0.50, 0.50, NA, NA, 0.80, NA, NA,...
-#> $ Full time?        <chr> "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", NA, "No", "No", "No", "No", "N...
-#> $ do not edit! ---> <dbl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
-#> $ Certification     <chr> "Physical ed", "Physical ed", "Instr. music", "PENDING", "PENDING", "Science 6-...
-#> $ Certification     <chr> "Theater", "Theater", "Vocal music", "Computers", NA, "Physics", "Physics", NA,...
-#> $ Certification     <dbl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
-#> $                   <dttm> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
-```
+#### R^2 output
+By default, NoRAND will produce an exported table, in .tdt (tab-delimited text file) format, of all R^2 values for each compound and both models. This may be found as exports/NoRAND_R2.tdt.
 
-Excel formatting led to an untitled empty column and 5 empty rows at the bottom of the table (only 12 records have any actual data). Bad column names are preserved.
-
-Clean it with janitor functions:
-
-``` r
-roster <- roster_raw %>%
-  clean_names() %>%
-  remove_empty_rows() %>%
-  remove_empty_cols() %>%
-  convert_to_NA(c("TBD", "PENDING")) %>%
-  mutate(hire_date = excel_numeric_to_date(hire_date),
-         main_cert = use_first_valid_of(certification, certification_2)) %>%
-  select(-certification, -certification_2) # drop unwanted columns
-
-roster
-#> # A tibble: 12 × 8
-#>      first_name last_name employee_status    subject  hire_date percent_allocated full_time      main_cert
-#>           <chr>     <chr>           <chr>      <chr>     <date>             <dbl>     <chr>          <chr>
-#> 1         Jason    Bourne         Teacher         PE 2008-08-30              0.75       Yes    Physical ed
-#> 2         Jason    Bourne         Teacher   Drafting 2008-08-30              0.25       Yes    Physical ed
-#> 3        Alicia      Keys         Teacher      Music 2001-08-15              1.00       Yes   Instr. music
-#> 4           Ada  Lovelace         Teacher       <NA> 1975-05-01              1.00       Yes      Computers
-#> 5         Desus      Nice  Administration       Dean 2013-06-06              1.00       Yes           <NA>
-#> 6  Chien-Shiung        Wu         Teacher    Physics 1930-03-20              0.50       Yes   Science 6-12
-#> 7  Chien-Shiung        Wu         Teacher  Chemistry 1930-03-20              0.50       Yes   Science 6-12
-#> 8         James     Joyce         Teacher    English 1990-05-01              0.50        No   English 6-12
-#> 9          Hedy    Lamarr         Teacher    Science 1976-06-08              0.50        No           <NA>
-#> 10       Carlos    Boozer           Coach Basketball 2015-08-05                NA        No    Physical ed
-#> 11        Young    Boozer           Coach       <NA> 1995-01-01                NA        No Political sci.
-#> 12      Micheal    Larsen         Teacher    English 2009-09-15              0.80        No    Vocal music
-```
-
-The core janitor cleaning function is `clean_names()` - call it whenever you load data into R.
-
-### Examining dirty data
-
-#### Finding duplicates
-
-Use `get_dupes()` to identify and examine duplicate records during data cleaning. Let's see if any teachers are listed more than once:
-
-``` r
-roster %>% get_dupes(first_name, last_name)
-#> # A tibble: 4 × 9
-#>     first_name last_name dupe_count employee_status   subject  hire_date percent_allocated full_time
-#>          <chr>     <chr>      <int>           <chr>     <chr>     <date>             <dbl>     <chr>
-#> 1 Chien-Shiung        Wu          2         Teacher   Physics 1930-03-20              0.50       Yes
-#> 2 Chien-Shiung        Wu          2         Teacher Chemistry 1930-03-20              0.50       Yes
-#> 3        Jason    Bourne          2         Teacher        PE 2008-08-30              0.75       Yes
-#> 4        Jason    Bourne          2         Teacher  Drafting 2008-08-30              0.25       Yes
-#> # ... with 1 more variables: main_cert <chr>
-```
-Yes, some teachers appear twice. We ought to address this before counting employees.
-
-#### Producing R^2 output
-By default, NoRAND will produce an exported table, in .tdt (tab-delimited text file) format, of all R^2 values for each compound and both models.
-
-If the user does not desire this function, it may be disabled by commenting out the line (NO.) 'GetAllR2()' in NoRAND_main.R. Alternatively, if the user wishes to edit the output of the function or change the name of the file produced (for example) the function GetAllR2() is straightforward to edit, and located in modules/statfunctions.R.
+If the user does not desire this function, it may be disabled by commenting out the line (NO.) 'GetAllR2()' in NoRAND_main.R. Alternatively, if the user wishes to edit the output of the function or change the name of the file produced (for example) the function GetAllR2() is straightforward to edit, and located in Modules/statfunctions.R. Just alter the vector "newfile" 
 
 
 Contact me

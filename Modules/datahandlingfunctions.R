@@ -19,9 +19,9 @@ Type[Type=='X']<-'Sample' #Define as either C or S for each sample
 Type<-factor(Type) #Coerce vector Type to a factor with two levels (C and S)
 
 
-orderA <- InjOrder$injection.order
-maxnRows <- max(nRows)
-finalorderSamples <- c(orderA[1:maxnRows])
+orderA <- InjOrder$injection.order #Used later, a vector created for brevity
+maxnRows <- max(nRows) #get some more info on the dimensions of the file
+finalorderSamples <- c(orderA[1:maxnRows]) #to get the final order of samples for RowMatch() function
 
 # - Sort out batches and injection order stuff
 MetabInjOrder <- as.numeric(InjOrder$injection.order)
@@ -34,40 +34,35 @@ InjFinal <- Inj.df[ !(is.na(InjOrder$Case.control)), ] #instead of removing stuf
 LogMeasurements <- log10(Metab) #Perform log transformation on measurements
 LogMeasurements <- as.matrix(LogMeasurements) #Coerce the vector into a matrix for later use
 
-# - Doing logs and stuff
-LogMeasurements <- log10(Metab)
-LogMeasurements <- as.matrix(LogMeasurements)
-
 InjFinal$Names <- gsub("^C(\\d)$", "C0\\1", InjFinal$Names) #need to turn C1 -> C01 etc. for parity between Metab and InjOrder
 InjFinal$Names <- gsub("^S(\\d)$", "S0\\1", InjFinal$Names) #for S1 -> S01 etc.
 
-MetabRowNamesDataFrame <- data.frame(Names = rownames(Metab))
-InjectionOrderForMatch <- as.data.frame(InjFinal)
+MetabRowNamesDataFrame <- data.frame(Names = rownames(Metab)) #Create a new data frame for RowMatch() that contains the sample names in rows
+InjectionOrderForMatch <- as.data.frame(InjFinal) #create a duplicate coerced to a data frame for use in RowMatch()
 
 #Rowmatch will only return non-null values if the grep = true. therefore if Lorder has length=83 (Length==nColumns) and is filled with non-null values, test has passed.
 
-RowMatch <- function(rr) {
-  ForMatch <- as.character(MetabRowNamesDataFrame$Names[rr])
-  if(grep(ForMatch, InjectionOrderForMatch$Names, value = TRUE) == MetabRowNamesDataFrame$Names[rr]) {
-    zz <- grep(ForMatch, InjectionOrderForMatch$Names, value = FALSE)
-    MatrixToOrder <- c(InjectionOrderForMatch$Names[rr], InjectionOrderForMatch$Order[zz])
-    # cat(InjectionOrderForMatch$Names[rr], "\t", InjectionOrderForMatch$Order[zz], "\n")
+RowMatch <- function(rr) { #a function to sort the samples by injection order contained in the run order file
+  ForMatch <- as.character(MetabRowNamesDataFrame$Names[rr]) #Things to match will be sample names (in rows)
+  if(grep(ForMatch, InjectionOrderForMatch$Names, value = TRUE) == MetabRowNamesDataFrame$Names[rr]) { #if a sample name matches that found in the run order file, then we have a match
+    zz <- grep(ForMatch, InjectionOrderForMatch$Names, value = FALSE) #then make a match and...
+    MatrixToOrder <- c(InjectionOrderForMatch$Names[rr], InjectionOrderForMatch$Order[zz]) #the final matrix for ordering is made up of those that match
   }
-  sort(MatrixToOrder)
+  sort(MatrixToOrder) #orders the matrix, giving us our final order
 }
 
-nrowsMetabNames <-dim(MetabRowNamesDataFrame)[1]
-Lorder <- 0
-for (i in 1:nrowsMetabNames) {
-  Lorder[i] <- RowMatch(i)
+nrowsMetabNames <-dim(MetabRowNamesDataFrame)[1] #the number of sample names is equal to the dimension of this vector... should work with a file of any dimensions
+Lorder <- 0 #init Lorder, the linear order of samples by when they were run
+for (i in 1:nrowsMetabNames) { #for each sample that exists
+  Lorder[i] <- RowMatch(i) #the corresponding subset of Lorder should be that returned by the function RowMatch() above.
 }
-Lorder <- as.numeric(Lorder)
+Lorder <- as.numeric(Lorder) #ensuring Lorder is a numeric before moving forward
 
 ShowAndTell <- function(i) { #this function produces the full set of graphs for a given compound, where i is the rownumber of that compound in Metab[]
   mkSingleGraphLog(i)
   DoCorrection.Linear(i)
   DoCorrection.Break(i)
-  cat(CompoundNames[,i], "\n", "Type covar. p-value:", pval.mod3[i], "\n", "Q-values for each model:", "\n", "Linear:", qvals.mod1[i], "\n", "Step:", qvals.mod2[i], "\n", "Linear covar. with Type:", qvals.mod3[i], "\n", "DOC1:", DOC.mod1[i], "\n", "DOC2:", DOC.mod2[i], "\n")
+  cat(CompoundNames[,i], "\n", "Type covar. p-value:", pval.mod3[i], "\n", "Q-values for each model:", "\n", "Linear model:", qvals.mod1[i], "\n", "Step model:", qvals.mod2[i], "\n", "Linear covariate with Type:", qvals.mod3[i], "\n", "Direction of change for model 1:", DOC.mod1[i], "\n", "Direction of change for model 2:", DOC.mod2[i], "\n")
 } #and gives descriptive output as required
 
 UserInput <- function() {

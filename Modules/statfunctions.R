@@ -7,11 +7,10 @@ library(qvalue) #Imports qvalue
 # - Making linear models
 
 # - Model 2: Before/After "break" (gap in days during experiment)
-IsBreak <- 36 # this will be a single value: the injection number of the sample done immediately before the break
-# break was found at Sample C30 (94), So everything <=36 in the list is before the break (= TRUE)
-#maybe make this modular with a readline() command later?
-Lorder.m <- as.matrix(Lorder)
-RowLorder.m <- row(Lorder.m)
+IsBreak <- 36 #Please change this to reflect a break in measurements in your data, if not using the example data
+#I.e. in the example data break was found at Sample C36 (Lorder[36] = 100), So everything <=36 in the list is before the break (= TRUE)
+Lorder.m <- as.matrix(Lorder) #coerce to a matrix
+RowLorder.m <- row(Lorder.m) #subset rows out of this matrix into a new matrix for later use
 BreakSplit <- Lorder <= IsBreak #The split is defined as a logical vector  
 BreakSplitC <- subset(BreakSplit, Type == "C")
 
@@ -36,23 +35,26 @@ AllR2.Break <- function(i) { #where the input is the number of the compound name
   RegStart <- Reg+12                           #as summary()$r.squared seems to run into problems with the break model (mod2)
   RegEnd <- Reg+28
   R2.Break[i] <- substring(grep("[\\d+]", summ.mod2[i], ignore.case = TRUE, value = TRUE), RegStart,RegEnd) #put the digits corresponding to the R^2 into a string
-  cat(signif(as.numeric(R2.Break[i]),3), "\n" ) #reduce to 3 sig fig
+  cat(signif(as.numeric(R2.Break[i]),3), "\n" ) #reduce to a sensible 3 significant figures, using cat for output
 }
 
 R2.Linear <- 0
-#Doing the same as above but for linear model R^2s
+#Doing the same as above but for linear model R^2s, which don't need such silly measures
 AllR2.Linear <- function(i) {
   mod1 <- lm(LogMeasurements[,i]~Lorder, subset=Type=='C')
   cat(CompoundNames[,i], "\t", signif(summary(mod1)$r.squared,3), "\t" )
 }
 
 GetAllR2 <- function() { #A function to output the R^2s for both models comparatively in a .tdt (tab-delimited) compatible format
-                         #NEED TO MAKE OUTPUT to "NoRAND_R2.tdt"
-  cat("Compound", "\t", "LINEAR R^2", "\t", "BREAK R^2", "\n")
-  for (i in seq_along(CompoundNames)) {
-    AllR2.Linear(i)
-    AllR2.Break(i)
+  newfile <- "exports/NoRAND_R2.tdt" #relative file path and name to export, you may change this to what you like
+  file.create(newfile) #create the file as described in the newfile vector above
+  sink(newfile) #this diverts output (i.e. from cat() statements) into the file, rather than the terminal
+  cat("Compound", "\t", "LINEAR R^2", "\t", "BREAK R^2", "\n") #creates column headers for the .tdt table
+  for (i in seq_along(CompoundNames)) { #for each compound...
+    cat(AllR2.Linear(i)) #print the results for the linear R2s
+    cat(AllR2.Break(i)) #print the results for break model R2s
   }
+  sink() #terminate diverting the output, so it returns to printing to terminal rather than the file
 }
 
 pval.mod1 <- 0 #initing vectors for use in later function

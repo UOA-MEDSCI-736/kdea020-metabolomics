@@ -1,9 +1,9 @@
 #NoRAND main script - RUN THIS!
 #K. Deane-Alder, 2016
-#Licensed under CC-BY 4.0
+#Licensed under CC-BY 4.0 International
 
 #This script has the main functions and input code for NoRAND
-#Secondary functions are imported as necessary
+#Secondary functions are soured in from /Modules/ as necessary
 
 Metab <- 0
 InjOrder <- 0
@@ -20,10 +20,10 @@ if( sum (grepl ("qvalue", CheckInstalled) ) == 0 ) { #if qvalue is not installed
 library(qvalue) #import qvalue library
 
 cat("Novel R script for the Analysis of Non-randomised Data (NoRAND) is a tool for producing interpretive statistics and modeling experimental error in non-randomised metabolomics datasets.", "\n", "\n")
-
+#Give the user some feedback on what they're running
 
 WD <- getwd() #set working directory for the project as wherever the script is opened
-cat("Working directory is:", WD, "\n", "\n")
+cat("Working directory is:", WD, "\n", "\n") #feedback on working directory for the user
 
 # For citation:
 citeQ <- "John D. Storey with contributions from Andrew J. Bass, Alan Dabney and David Robinson (2015). qvalue: Q-value estimation for false
@@ -51,10 +51,10 @@ InputFiles <- function() { #Init a function to allow for the user to input their
       UserInput() #Run the UserInput function
     }
   if(grepl("N", default, ignore.case = TRUE) == TRUE) { #But if it's an N (the use wants to specify their own dataset)...
-    cat("Please choose a .CSV file containing the main dataset.", "(Press ENTER to continue)", "\n") #ask them what they want to input
+    cat("Please choose a .CSV file containing the metabolite data.", "(Press ENTER to continue)", "\n") #ask them what they want to input
     wait <- readline() #wait on their input
     MetabChoose <- file.choose() #open up R's inbuilt file selection GUI
-    cat("Please choose a .CSV file containing the injection order for the samples.", "(Press ENTER to continue)", "\n")
+    cat("Please choose a .CSV file containing the run order for the samples.", "(Press ENTER to continue)", "\n")
     wait <- readline()
     InjChoose <- file.choose()
     myfile <<- as.character(MetabChoose) #assigning files as globals for input...
@@ -65,10 +65,10 @@ InputFiles <- function() { #Init a function to allow for the user to input their
     source ("Modules/plotfunctions.R")
     source ("Modules/statfunctions.R")
     UserInput()
-    GetAllR2()
   }
 }
 
 InputFiles()
+GetAllR2() #Exports the tabulated file of R^2s for both the linear and step models
 
-source ("Modules/TESTING.R")
+source ("Modules/TESTING.R") #finally, source the tests so that the above (and other functions in the modules) can be tested automatically
