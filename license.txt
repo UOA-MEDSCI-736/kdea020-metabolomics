@@ -1,0 +1,5 @@
+NoRAND, this repository, and all files therein are licensed under CC-BY-4.0.
+
+This means that you are free to share, adapt, and build upon this material for any purpose, as long as you give sufficient attribution to the original creator and clearly indicate what has been changed.
+
+For further information, please see https://creativecommons.org/licenses/by/4.0/
