@@ -111,12 +111,25 @@ NoRAND will ask you to enter a compound name. This prompt takes a text string an
 
 
 #### Plotting
-After choosing a compound to analyse, NoRAND will produce three plots of the compound on a log scale:
+Once a compound to analyse has been chosen, NoRAND will produce three plots of the compound (relative abundance vs. sample order) on a log scale. Here are examples of the three plots from phenylalanine in the example data:
 
+##### Basic plot with regression line:
+![A plot](https://github.com/kdea020/metabolomics-project/blob/master/example%20data/phen_linear.png)
+
+##### Corrected for run order by linear regression:
+![A plot](https://github.com/kdea020/metabolomics-project/blob/master/example%20data/phen_2.png)
+
+#### Corrected for variance introduced by a 'break':
+![A plot](https://github.com/kdea020/metabolomics-project/blob/master/example%20data/phen_3.png)
+
+
+These example plots are also available as .pngs in the /example data/ folder of this Github repository.
 
 
 #### Statistical output
-After drawing the plots, NoRAND will dump statistical output to the console, as well as exporting 
+After drawing the plots, NoRAND will dump statistical output to the console. This includes p-values and q-values for each model, as well as the direction of change for metabolite concentration across samples for each model (as corrections can alter the magnitude or even the sign of this change).
+
+NoRAND will also produce a simple plaintext summary in /exports/ called `[Compound name (i.e. phenylalanine)]_statistics.txt`.
 
 
 ### Adjusting program parameters
