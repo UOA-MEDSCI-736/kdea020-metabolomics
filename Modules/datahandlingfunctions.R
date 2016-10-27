@@ -62,10 +62,10 @@ ShowAndTell <- function(i) { #this function produces the full set of graphs for 
   mkSingleGraphLog(i)
   DoCorrection.Linear(i)
   DoCorrection.Break(i)
-  cat(CompoundNames[,i], "\n", "Linear regression p-value:", pval.mod1[i], "Break/step model p-value:", pval.mod2[i], "Type covariate model p-value:", pval.mod3[i], "\n", "Q-values for each model:", "\n", "Linear model:", qvals.mod1[i], "\n", "Step model:", qvals.mod2[i], "\n", "Linear covariate with Type:", qvals.mod3[i], "\n", "Direction of change for model 1:", DOC.mod1[i], "\n", "Direction of change for model 2:", DOC.mod2[i], "\n")
+  cat(CompoundNames[,i], "\n", "Linear regression p-value:", pval.mod1[i], "Break/step model p-value:", pval.mod2[i], "Case/control covariate model p-value:", pval.mod3[i], "\n", "Q-values for each model:", "\n", "Linear model:", qvals.mod1[i], "\n", "Step model:", qvals.mod2[i], "\n", "Linear covariate with case/control:", qvals.mod3[i], "\n", "Direction of change for model 1:", DOC.mod1[i], "\n", "Direction of change for model 2:", DOC.mod2[i], "\n")
   makeafile <- paste("exports/", CompoundNames[,i], "statistics.txt") #for exporting stats to .txt. This file will be unique for each compound.
   sink(makeafile) #dump output to file
-  cat(CompoundNames[,i], "\n", "Linear regression p-value:", pval.mod1[i], "\n", "Break/step model p-value:", pval.mod2[i], "\n", "Type covariate model p-value:", pval.mod3[i], "\n", "Q-values for each model:", "\n", "Linear model:", qvals.mod1[i], "\n", "Step model:", qvals.mod2[i], "\n", "Linear covariate with Type:", qvals.mod3[i], "\n", "Direction of change for model 1:", DOC.mod1[i], "\n", "Direction of change for model 2:", DOC.mod2[i], "\n")
+  cat(CompoundNames[,i], "\n", "Linear regression p-value:", pval.mod1[i], "\n", "Break/step model p-value:", pval.mod2[i], "\n", "Case/control covariate model p-value:", pval.mod3[i], "\n", "Q-values for each model:", "\n", "Linear model:", qvals.mod1[i], "\n", "Step model:", qvals.mod2[i], "\n", "Linear covariate with case/control:", qvals.mod3[i], "\n", "Direction of change for model 1:", DOC.mod1[i], "\n", "Direction of change for model 2:", DOC.mod2[i], "\n")
   sink()
 } #and gives descriptive output as required
 
