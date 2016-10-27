@@ -42,11 +42,11 @@ NoRAND expects data in th
 #### Metabolite data
 NoRAND is designed to work with relative abundance values obtained from metabolomics experiments using mass spectrometry.
 
-#> Name	S02	S03	S04	S05	S06
-#> Aspartic acid	114.763241	101.7201702	108.9033102	87.91465664	102.4046656
-#> Phenylalanine	48.47677892	54.55288819	55.24501607	46.59827622	51.18515474
-#> Leucine	92.74353472	111.1656868	95.42636172	81.76610921	90.2420409
-#> Alanine	246.0528951	237.6442629	258.883971	180.6158395	284.2731637
+> Name              S02	            S03	            S04	            S05	            S06
+> Aspartic acid     114.763241	    101.7201702	    108.9033102	    87.91465664	    102.4046656
+> Phenylalanine	    48.47677892	    54.55288819	    55.24501607	    46.59827622	    51.18515474
+> Leucine	        92.74353472	    111.1656868	    95.42636172	    81.76610921	    90.2420409
+> Alanine	        246.0528951	    237.6442629	    258.883971	    180.6158395	    284.2731637
 
 
 
@@ -54,23 +54,21 @@ NoRAND is designed to work with relative abundance values obtained from metabolo
 As NoRAND is based upon the analysis of samples by order, you must also provide it with the order in which the samples were run on the equipment. Each sample should be named as in the metabolite data file. Controls should be labelled as C## (where ## = 01, 02, 03...) and cases as S## (## = 01, 02, 03...). Tests and blanks or calibration samples should be labelled T## or B##.
 This should be ordered in three columns, the first having the injection order (beginning at 1) and the second containing the name of the sample. Please also indicate whether a sample is case or control in a third column (called, exactly, "Case control"). Blanks and tests should have this column remain empty (not 0) so that NoRAND will ignore them appropriately. Like so:
 
-#> injection order	Name case.control
-#> 1	T1                             
-#> 2	T2                 
-#> 3	T3
-#> 4	C1 1
-#> 5	C2 1
-#> 6	C3 1
-#> 7	C4 1
-#> 8	C5 1
-#> 9	C6 1
-#> 10	C7    1
-#> 11	C8    1
-#> 12	C9    1
-#> 13	C10   1
-#> 14	B1
-#> 15	B2
-#> 16	B3
+> injection order   Name    case.control
+> 1                 T1
+> 2                 T2
+> 3                 T3
+> 4	                C1      1
+> 5	                C2      1
+> 6	                C3      1
+> 7	                C4      1
+> 8	                C5      1
+> 9	                C6      1
+> 10	            C7      1
+> 11	            C8      1
+> 12	            C9      1
+> 13	            C10     1
+> 14	            B1
 
 There must be exactly the same number of C/S samples in the injection order file as in the metabolite data, or NoRAND will not produce the correct output.
 
