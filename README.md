@@ -3,11 +3,7 @@
 > -- *"[Why Is Random Sampling Important?](https://www.ma.utexas.edu/users/mks/statmistakes/RandomSampleImportance.html)" - Martha K. Smith, 2012*
 
 
-=======
-<hr>
-Novel R script for the Analysis of Non-randomised Data (NoRAND)
-<hr/>
-=======
+## Novel R script for the Analysis of Non-randomised Data (NoRAND)
 
 ------------------------------------------------------------------------
 
