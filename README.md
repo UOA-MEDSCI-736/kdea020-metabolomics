@@ -20,18 +20,24 @@ The main NoRAND functions:
 ### Installation of NoRAND
 Installation of NoRAND is simple: download the files and folders from this Github repository altogether in a .zip archive, and then extract them (keeping the directories intact) to the folder of your choice. Please ensure that you have R version 3.3.0 or later installed on your operating system of choice.
 
+
 ### Dependencies
 There are two external R packages upon which NoRAND is dependent: 
 
 #### Qvalue
 - For interpretive statistics of metabolites, NoRAND employs the qvalue package from BioConductor. This package is not available through CRAN.
-- Full installation instructions are available at [the official BioConductor page for the qvalue package]()
-- 
+- Full installation instructions and more information are available at [the official BioConductor page for the qvalue package](https://bioconductor.org/packages/release/bioc/html/qvalue.html)
+
+A quick install may be performed by opening R and entering
+```source("https://bioconductor.org/biocLite.R")
+biocLite("qvalue")
+```
+- qvalue is (C) 2016 BioConductor and used here under the provisions of the LGPL.
 
 #### Testthat
 - Testthat is used by NoRAND for automated testing of functions. You may download it from [CRAN](https://cran.r-project.org/web/packages/testthat/index.html).
 - Alternatively, testthat can be acquired by running R from the command line (or RStudio) and entering `install.packages(testthat)`.
-- Testthat was created by Hadley Wickham 
+- Testthat is (C) Hadley Wickham, 2016, and used here under the provisions of the MIT license. 
 
 
 ### Runnning NoRAND
@@ -97,6 +103,11 @@ In raw . CSV:
 NoRAND employs R's inbuilt user interface for importing your own data into the script. Simply choose "N" at the "Use example data?" prompt when NoRAND is first run, and an explorer menu will pop up and allow you to navigate to your files of choice in .CSV format.
 
 #### Compound selection
+NoRAND will ask you to enter a compound name. This prompt takes a text string and will search through all ocm
+
+
+#### Plotting and statistical output
+After choosing a compound to analyse, NoRAND will produce three plots of the compound on a log scale: a linear regression of relative abundance v. time; a 
 
 
 ### Adjusting program parameters
@@ -113,7 +124,7 @@ NoRAND's q-value procedures use a lambda cutoff of 0.01 (following Benjamini-Hoc
 #### R^2 output
 By default, NoRAND will produce an exported table, in .tdt (tab-delimited text file) format, of all R^2 values for each compound and both models. This may be found as exports/NoRAND_R2.tdt.
 
-If the user does not desire this function, it may be disabled by commenting out the `GetAllR2()` near the bottom of NoRAND_main.R. Alternatively, if the user wishes to edit the output of the function or change the name of the file produced (for example) the function `GetAllR2()` is straightforward to edit, and located in Modules/statfunctions.R. Just alter the vector `newfile` to the file path and name you wish to export to.
+If the user does not desire this function, it may be disabled by commenting out the `GetAllR2()` near the bottom of NoRAND_main.R. Alternatively, if the user wishes to edit the output of the function or change the name of the file produced (for example) the function `GetAllR2()` is straightforward to edit, and located in Modules/statfunctions.R. Just alter the vector `newfile` to the file path and name you wish to export to instead.
 
 
 Contact me
