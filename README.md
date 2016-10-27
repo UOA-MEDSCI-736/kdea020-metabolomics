@@ -146,16 +146,20 @@ NoRAND will also produce a simple plaintext summary in /exports/ called `[Compou
 ### Adjusting program parameters
 
 #### Step model
-The step model estimates the effect of a "break" in measurements - this is to correct for the rare circumstance of a "batch" effect with only two batches. In the example data, this break occured at sample C36. If you are using NoRAND to analyse your own data, and you suspect a similar event has occured during your data collection procedures, you may alter a parameter to reflect the individual circumstance of your data. In Modules/statfunctions.R, line 10, the vector `IsBreak` is a numeric that contains a listed sample number, as found in the vector `Lorder`. This value should be changed to the subset of `Lorder` (i.e. `Lorder[36]`) that corresponds to the last sample measured before the break in measurements.
+The step model estimates the effect of a "break" in measurements - this is to correct for the rare circumstance of a "batch" effect with only two batches. In the example data, this break occured at sample C36. If you are using NoRAND to analyse your own data, and you suspect a similar event has occured during your data collection procedures, you may alter a parameter to reflect the individual circumstance of your data.
+
+In Modules/statfunctions.R, line 10, the vector `IsBreak` is a numeric that contains a listed sample number, as found in the vector `Lorder`. This value should be changed to the subset of `Lorder` (i.e. `Lorder[36]`) that corresponds to the last sample measured before the break in measurements.
 
 #### Plotting
-To ensure comparability between plots when assessing model quality, NoRAND uses a fixed Y axis scale for log(metabolite relative abundance). By default, when plotting on log scale NoRAND will scale from -2 to +3 orders of magnitude. If you are working with data that needs a larger y axis - such as a raw, non-normalised dataset for prospective analysis - you can change the values in the vector `y.lim` on line 7 of Modules/plotfunctions.R from `y.lim <- c(-2,3)` to whatever integers you like, with the format `y.lim <- c([lowerlimit],[upperlimit])`. The logarithmic plots will still be displayed on the same scale, now with your specified scaling.
+To ensure comparability between plots when assessing model quality, NoRAND uses a fixed Y axis scale for log(metabolite relative abundance). By default, when plotting on log scale NoRAND will scale from -2 to +3 orders of magnitude. If you are working with data that needs a larger y axis - such as a raw, non-normalised dataset for prospective analysis - this can be altered.
+
+Change the values in the vector `y.lim` on line 7 of Modules/plotfunctions.R from `y.lim <- c(-2,3)` to whatever integers you like, with the format `y.lim <- c([lowerlimit],[upperlimit])`. The logarithmic plots will still be displayed on the same scale, now with your specified scale.
 
 #### Interpretive statistics
 NoRAND's q-value procedures use a lambda cutoff of 0.01 (following Benjamini-Hochburg). If you wish to use a more stringent, or relaxed, false discovery rate cutoff, you can alter the "lambda" setting for vectors `qvals.mod1-3` in lines 78-80 of Modules/statfunctions.R.
 
 #### R^2 output
-By default, NoRAND will produce an exported table, in .tdt (tab-delimited text file) format, of all R^2 values for each compound and both models. This may be found as exports/NoRAND_R2.tdt.
+By default, NoRAND will produce an exported table, in .tdt (tab-delimited text file) format, of all R^2 values for each compound and both models. This may be found in *exports/NoRAND_R2.tdt.*
 
 If the user does not desire this function, it may be disabled by commenting out the `GetAllR2()` near the bottom of NoRAND_main.R. Alternatively, if the user wishes to edit the output of the function or change the name of the file produced (for example) the function `GetAllR2()` is straightforward to edit, and located in Modules/statfunctions.R. Just alter the vector `newfile` to the file path and name you wish to export to instead.
 
