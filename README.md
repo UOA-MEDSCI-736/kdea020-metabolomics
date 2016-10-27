@@ -7,21 +7,32 @@
 
 ------------------------------------------------------------------------
 
-**NoRAND** is a simple program designed to perform basic interpretive statistics on non-randomised metabolomics data. 
+**NoRAND** is a simple R script designed to perform basic interpretive statistics on non-randomised metabolomics data. 
 
 The main NoRAND functions:
 
 - Processing of non-randomised metabolomics data
 - Graphical output of compound abundance between samples
-- Comparative statistical models to estimate the contribution of Type I error in the sample
+- Comparative statistical models to estimate the contribution of Type I errors in the data
 - Parametric and non-parametric interpretive statistical output
 
 
 ### Installation of NoRAND
-
+Installation of NoRAND is simple: download the files and folders from this Github repository altogether in a .zip archive, and then extract them (keeping the directories intact) to the folder of your choice. Please ensure that you have R version 3.3.0 or later installed on your operating system of choice.
 
 ### Dependencies
-For interpretive statistics of metabolites, NoRAND employs the qvalue package from BioConductor. 
+There are two external R packages upon which NoRAND is dependent: 
+
+#### Qvalue
+- For interpretive statistics of metabolites, NoRAND employs the qvalue package from BioConductor. This package is not available through CRAN.
+- Full installation instructions are available at [the official BioConductor page for the qvalue package]()
+- 
+
+#### Testthat
+- Testthat is used by NoRAND for automated testing of functions. You may download it from [CRAN](https://cran.r-project.org/web/packages/testthat/index.html).
+- Alternatively, testthat can be acquired by running R from the command line (or RStudio) and entering `install.packages(testthat)`.
+- Testthat was created by Hadley Wickham 
+
 
 ### Runnning NoRAND
 It is highly recommended that you run NoRAND (NoRAND_main.R) through RStudio (LINK), as it provides an intuitive way of working with R scripts. This also makes it easy to save plots produced by the script, as one can simply right-click on the plot in the viewer window of RStudio and export an image file. However, NoRAND will still work without issue from the command line in Windows, Ubuntu 16.04, or MacOSX. Simply navigate to the "main" folder of NoRAN (where the readme D and type "Rscript NoRAND_main.R".
@@ -30,10 +41,7 @@ It is highly recommended that you run NoRAND (NoRAND_main.R) through RStudio (LI
 ## Using NoRAND
 -------------
 
-NoRAND includes a set of example data (in the folder example data/) 
-
-
-comparison of raw data files and R's processsing... also, graphs! example output!
+NoRAND includes a set of example data (in the folder /example data/) to illustrate the ideal use of the program. NoRAND will give you a choice about using this data when you run it.
 
 
 ### NoRAND's file format expectations
@@ -44,14 +52,15 @@ NoRAND is designed to work with relative abundance values obtained from metabolo
 
 Name | S02 | S03 | S04 | S05 | S06
 --- | --- | --- | --- | --- | ---
-Aspartic acid | 114.763241 | 101.720170108.9033102 | 87.91465664 | 102.4046656
+Aspartic acid | 114.763241 | 101.720170108.9033102 | 87.91465664 | 102.4046656 | 107.3506941
 Phenylalanine | 48.47677892 | 54.55288819 | 55.24501607 | 46.59827622 | 51.18515474
 
 In raw .CSV:
 
 ```Name,S02,S03,S04,S05,S06
-Aspartic acid,114.763241,101.7201702,108.9033102,87.91465664,102.4046656
-Phenylalanine,48.47677892,54.55288819,55.24501607,46.59827622,51.18515474```
+Aspartic acid,114.763241,101.7201702,108.9033102,87.91465664,102.4046656,107.3506941
+Phenylalanine,48.47677892,54.55288819,55.24501607,46.59827622,51.18515474
+```
 
 ### Injection order data
 As NoRAND is based upon the analysis of samples by order, you must also provide it with the order in which the samples were run on the equipment. Each sample should be named as in the metabolite data file. Controls should be labelled as C## (where ## = 01, 02, 03...) and cases as S## (## = 01, 02, 03...). Tests and blanks or calibration samples should be labelled T## or B##.
@@ -78,12 +87,16 @@ In raw . CSV:
 5,C2,1
 6,C3,1
 7,C4,1
-8,C5,1```
+8,C5,1
+```
 
 *There must be exactly the same number of C/S samples in the injection order file as in the metabolite data, or NoRAND will not produce the correct output.*
 
+
 ### Choosing your own data
-NoRAND employs R's inbuilt user interface for importing your own data into the script. Simply choose "N" at the "Use example data?" prompt when NoRAND is first run, and an explorer menu will pop up and allow you to navigate to your files of choice.
+NoRAND employs R's inbuilt user interface for importing your own data into the script. Simply choose "N" at the "Use example data?" prompt when NoRAND is first run, and an explorer menu will pop up and allow you to navigate to your files of choice in .CSV format.
+
+#### Compound selection
 
 
 ### Adjusting program parameters
