@@ -30,8 +30,8 @@ DoCorrection.Linear <- function(i) { #this function performs corrections to the 
   predict.mod1 <- predict(mod1, newdata=TotalDataForPredict) #outputting predict() into a vector
   finalvalues <- LogMeasurements[,i]  - predict.mod1 #subtracting the residuls (above output) to correct data based on subtracting residuals
   sig <- t.test(finalvalues~Type) #perform parametric t-test with welch's correction on the data to test for case/control differences in means
-  title <- c(CompoundNames[,i], "Linear Model", "t.test p =", signif(sig$p.value,3)) #create a title vector inc. compound name and 
-  plot(Lorder, finalvalues, main = title, xlab = "Injection Order", ylab = "Log Relative Intensity", col=Type, ylim = y.lim) #
+  title <- c(CompoundNames[,i], "Linear Model", "t.test p =", signif(sig$p.value,3)) #create a title vector inc. compound name and pvalue
+  plot(Lorder, finalvalues, main = title, xlab = "Injection Order", ylab = "Log Relative Intensity", col=Type, ylim = y.lim) #draw a plot
   devAskNewPage(ask = TRUE) #ask for the user to press ENTER before producing the next graph
 }
 

@@ -36,7 +36,7 @@ test_that("The (double) vector Lorder is storing the properly ordered output val
 } )
 
 test_that("R has correctly produced tabulated R^2 output", {
-  FileLocation <- paste("../", as.character(newfile)) #the test will therefore still work even if the user has changed the filename and path for export
-  print(FileLocation)
-  Filecheck <- read.delim(FileLocation)
+  FileLocation <- as.character(newfile) #the test will therefore still work even if the user has changed the filename and path for export
+  File <- read.delim2(FileLocation) #Import the .tdt into a matrix (File)
+  expect_equal(length(File[,1]), length(CompoundNames)) #the number of values in this index of the matrix should match the number of compounds found by NoRAND (47 in the example data)
 })

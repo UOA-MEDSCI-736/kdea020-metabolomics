@@ -48,7 +48,7 @@ InputFiles <- function() { #Init a function to allow for the user to input their
       source ("Modules/datahandlingfunctions.R")
       source ("Modules/plotfunctions.R")
       source ("Modules/statfunctions.R")
-      UserInput() #Run the UserInput function
+      UserInput() #Run the UserInput function, which also calls the rest of NoRAND
     }
   if(grepl("N", default, ignore.case = TRUE) == TRUE) { #But if it's an N (the use wants to specify their own dataset)...
     cat("Please choose a .CSV file containing the metabolite data.", "(Press ENTER to continue)", "\n") #ask them what they want to input
@@ -68,7 +68,7 @@ InputFiles <- function() { #Init a function to allow for the user to input their
   }
 }
 
-InputFiles()
+InputFiles() #Run the above function
 GetAllR2() #Exports the tabulated file of R^2s for both the linear and step models
 
 source ("Modules/TESTING.R") #finally, source the tests so that the above (and other functions in the modules) can be tested automatically

@@ -26,10 +26,12 @@ There are two external R packages upon which NoRAND is dependent:
 
 #### Qvalue
 - For interpretive statistics of metabolites, NoRAND employs the qvalue package from BioConductor. This package is not available through CRAN.
-- Full installation instructions and more information are available at [the official BioConductor page for the qvalue package](https://bioconductor.org/packages/release/bioc/html/qvalue.html)
+- Full installation instructions and more information are available at [the official BioConductor page for the qvalue package.](https://bioconductor.org/packages/release/bioc/html/qvalue.html)
 
-A quick install may be performed by opening R and entering
-```source("https://bioconductor.org/biocLite.R")
+- A quick install may be performed by opening R and entering:
+
+```
+source("https://bioconductor.org/biocLite.R")
 biocLite("qvalue")
 ```
 - qvalue is (C) 2016 BioConductor and used here under the provisions of the LGPL.
@@ -61,9 +63,10 @@ Name | S02 | S03 | S04 | S05 | S06
 Aspartic acid | 114.763241 | 101.720170108.9033102 | 87.91465664 | 102.4046656 | 107.3506941
 Phenylalanine | 48.47677892 | 54.55288819 | 55.24501607 | 46.59827622 | 51.18515474
 
-In raw .CSV:
+##### In raw .CSV:
 
-```Name,S02,S03,S04,S05,S06
+```
+Name,S02,S03,S04,S05,S06
 Aspartic acid,114.763241,101.7201702,108.9033102,87.91465664,102.4046656,107.3506941
 Phenylalanine,48.47677892,54.55288819,55.24501607,46.59827622,51.18515474
 ```
@@ -83,9 +86,10 @@ injection order | Name | Case control
 7 | C4 | 1
 8 | C5 | 1
 
-In raw . CSV:
+##### In raw . CSV:
 
-```injection order,Name,Case control,
+```
+injection order,Name,Case control,
 1,T1,
 2,T2,
 3,T3,
@@ -103,11 +107,16 @@ In raw . CSV:
 NoRAND employs R's inbuilt user interface for importing your own data into the script. Simply choose "N" at the "Use example data?" prompt when NoRAND is first run, and an explorer menu will pop up and allow you to navigate to your files of choice in .CSV format.
 
 #### Compound selection
-NoRAND will ask you to enter a compound name. This prompt takes a text string and will search through all ocm
+NoRAND will ask you to enter a compound name. This prompt takes a text string and will search through all compound names to match the string you enter. It supports partial matching. You can also press [ENTER] at the prompt to get a list of all compounds found. Then, simply enter the number that corresponds to the compound you wish to plot.
 
 
-#### Plotting and statistical output
-After choosing a compound to analyse, NoRAND will produce three plots of the compound on a log scale: a linear regression of relative abundance v. time; a 
+#### Plotting
+After choosing a compound to analyse, NoRAND will produce three plots of the compound on a log scale:
+
+
+
+#### Statistical output
+After drawing the plots, NoRAND will dump statistical output to the console, as well as exporting 
 
 
 ### Adjusting program parameters
