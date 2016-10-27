@@ -22,7 +22,9 @@ Installation of NoRAND is simple: download the files and folders from this Githu
 
 
 ### Dependencies
-There are two external R packages upon which NoRAND is dependent: 
+*NoRAND requires R version 3.3.0 or later to be installed, and its use under earlier versions is not supported.*
+
+Additionally, there are two external R packages upon which NoRAND is dependent: 
 
 #### Qvalue
 - For interpretive statistics of metabolites, NoRAND employs the qvalue package from BioConductor. This package is not available through CRAN.
@@ -43,7 +45,11 @@ biocLite("qvalue")
 
 
 ### Runnning NoRAND
-It is highly recommended that you run NoRAND (NoRAND_main.R) through RStudio (LINK), as it provides an intuitive way of working with R scripts. This also makes it easy to save plots produced by the script, as one can simply right-click on the plot in the viewer window of RStudio and export an image file. However, NoRAND will still work without issue from the command line in Windows, Ubuntu 16.04, or MacOSX. Simply navigate to the "main" folder of NoRAN (where the readme D and type "Rscript NoRAND_main.R".
+Simply: Open R through the command line, or another method, and use the command `source(*NoRAND_main.R*)`
+
+It is highly recommended that you run NoRAND (source *NoRAND_main.R*) through [RStudio](www.rstudio.com), as it provides a convenient and accessible way of opening and working with R scripts. RStudio also makes it easy to save plots produced by the script, as one can simply right-click on the plot in the viewer window of RStudio and export an image file.
+
+However, NoRAND will still work without issue from the command line in Windows, Ubuntu 16.04, or MacOSX. Simply navigate to the "main" folder of NoRAND (whereever NoRAND_main.R is located) and type `Rscript NoRAND_main.R`.
 
 
 ## Using NoRAND
@@ -74,8 +80,9 @@ Phenylalanine,48.47677892,54.55288819,55.24501607,46.59827622,51.18515474
 ```
 
 ### Injection order data
-As NoRAND is based upon the analysis of samples by order, you must also provide it with the order in which the samples were run on the equipment. Each sample should be named as in the metabolite data file. Controls should be labelled as C## (where ## = 01, 02, 03...) and cases as S## (## = 01, 02, 03...). Tests and blanks or calibration samples should be labelled T## or B##.
-This should be ordered in three columns, the first having the injection order (beginning at 1) and the second containing the name of the sample. Please also indicate whether a sample is case or control in a third column (called, exactly, "Case control"). Blanks and tests should have this column remain empty (not 0) so that NoRAND will ignore them appropriately. Like so:
+As NoRAND is based upon the analysis of samples by order, you must also provide it with the order in which the samples were run on the equipment. Each sample should be named as in the metabolite data file. Controls should be labelled as `C##` (where ## = 01, 02, 03...) and cases as `S##` (## = 01, 02, 03...). Tests and blanks or calibration samples should be labelled as anything other than C##/S##.
+
+*The file should be ordered in three columns*, the first having the injection order (beginning at 1) and the second containing the name of the sample. Please also indicate whether a sample is case or control in a third column (called, exactly, "Case control"). Blanks and tests should have this column remain empty (not 0) so that NoRAND will ignore them appropriately. Like so:
 
 injection order | Name | Case control
 --- | --- | --- 
